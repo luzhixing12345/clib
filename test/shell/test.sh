@@ -1,6 +1,6 @@
-
 #!/bin/bash
 
 source "../common.sh"
 
-./args || { ERR "Error: args test failed"; exit 1; }
+./parseline || { ERR "Error: args test failed"; exit 1; }
+INFO "args test passed"

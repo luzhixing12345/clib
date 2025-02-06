@@ -6,6 +6,13 @@
 #include <stdlib.h>
 #include <string.h>
 
+/**
+ * @brief 解析命令行
+ * 
+ * @param cmdbuf 
+ * @param args 
+ * @return int 
+ */
 int parseline(const char *cmdbuf, struct cmd_arg *args) {
     if (!cmdbuf || !args) {
         return -1;  // 参数无效

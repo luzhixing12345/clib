@@ -4,14 +4,19 @@
 #include <unistd.h>
 
 // Structure to hold progress bar information
-typedef struct {
+struct tqdm {
     int total;
     int count;
-    int size;
+    int bar_len;
     double average_time;
     double last_time;
     double total_time;
-} tqdm;
 
-int init_tqdm(tqdm *progress, int total, int size);
-void update_tqdm(tqdm *progress, int x);
+    // could be configured
+    char *filled_char;  // "█"
+    char *empty_char;   // " "
+    void (*end_format)(struct tqdm *tqdm, int x);
+};
+
+int init_tqdm(struct tqdm *progress, int total);
+void update_tqdm(struct tqdm *progress, int x);

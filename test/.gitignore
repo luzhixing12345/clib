@@ -7,4 +7,5 @@
 !argparse/
 !hashtable/
 !shell/
+!tqdm
 !*.sh

@@ -1,7 +1,7 @@
 #!/bin/bash
 source "common.sh"
 # 定义要检查的文件夹列表
-folders=("log" "hashtable" "shell")  # 替换为实际的文件夹名称
+folders=("log" "hashtable" "shell" "tqdm")  # 替换为实际的文件夹名称
 
 # 遍历文件夹并执行其中的 test.sh
 for folder in "${folders[@]}"; do

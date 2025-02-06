@@ -53,10 +53,10 @@ OBJCOPY		:= objcopy
 # ------------------------- #
 CFLAGS 			:= -DCONFIG_VERSION=\"$(VERSION).$(PATCHLEVEL).$(SUBLEVEL)\" -g
 LDFLAGS 		:= 
-LIBS			:= -L.. -lclib
+LIBS			:= 
 DEFINES     	:= 
 THIRD_LIB   	:= 
-INCLUDE_PATH 	:= ../clib
+INCLUDE_PATH 	:= 
 # ------------------------- #
 
 ifneq ($(strip $(INCLUDE_PATH)),)
