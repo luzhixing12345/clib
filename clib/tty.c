@@ -7,7 +7,7 @@
  *@Github: luzhixing12345
  */
 
-#include "term.h"
+#include "tty.h"
 
 #include <dirent.h>
 #include <linux/limits.h>
@@ -245,14 +245,14 @@ const char *filename_print(const char *file_name, const char *full_path, dircolo
                     color_code = database->sg;
                 } else {
                     // 文件名后缀匹配
-                    int dot_pos = findChar(file_name, '.', -1);
+                    char *dot = strrchr(file_name, '.');
                     int suffix_match = 0;
-                    if (dot_pos != -1) {
+                    if (dot) {
                         for (int i = 0; i < database->item_number; i++) {
                             if (strlen(database->dc_kvs[i].key) >= 2 && database->dc_kvs[i].key[0] == '*' &&
                                 database->dc_kvs[i].key[1] == '.') {
                                 // printf("[%s] [%s]\n", database->dc_kvs[i].key + 1, file_name + dot_pos);
-                                if (!strcmp(database->dc_kvs[i].key + 1, file_name + dot_pos)) {
+                                if (!strcmp(database->dc_kvs[i].key + 1, dot)) {
                                     color_code = database->dc_kvs[i].value;
                                     suffix_match = 1;
                                     break;

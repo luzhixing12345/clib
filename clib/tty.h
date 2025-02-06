@@ -5,8 +5,47 @@
 
 #include "string.h"
 
-// 终端字体设置
 
+#define CURSOR_LEFT(x)         \
+    {                          \
+        printf("\033[%dD", x); \
+        fflush(stdout);        \
+    }
+#define CURSOR_RIGHT(x)        \
+    {                          \
+        printf("\033[%dC", x); \
+        fflush(stdout);        \
+    }
+#define CURSOR_UP()       \
+    {                     \
+        printf("\033[A"); \
+        fflush(stdout);   \
+    }
+#define CURSOR_DOWN()     \
+    {                     \
+        printf("\033[B"); \
+        fflush(stdout);   \
+    }
+#define CLEAR_SCREEN()     \
+    {                      \
+        printf("\033[2J"); \
+        fflush(stdout);    \
+    }
+
+#define CURSOR_RESET() \
+    {                  \
+        printf("\033[H"); \
+        fflush(stdout);    \
+    }
+
+// \b 退格 + 空格 + 退格
+#define DELETE_CHAR()    \
+    {                    \
+        printf("\b \b"); \
+        fflush(stdout);  \
+    }
+
+// 终端字体设置
 #define TERM_FONT_DEFAULT      "\033[0m"   // 默认字体
 #define TERM_FONT_BOLD         "\033[1m"   // 高亮前景色
 #define TERM_FONT_NO_BLOD      "\033[22m"  // 取消高亮前景色

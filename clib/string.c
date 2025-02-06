@@ -1,81 +1,92 @@
 
 #include "string.h"
+#include <stdio.h>
 
 /**
- * @brief 分割字符串, 返回数组.
- *
- * @param str 待分割的字符串
- * @param c 分割所使用的字符
- * @param result 返回数组 (call freeSplitStr to free)
- * @param length 数组长度
+ * @brief Split a string by a specified delimiter
+ * 
+ * @param str The input string to be split
+ * @param c The delimiter character
+ * @param result Pointer to the output array of strings
+ * @param length Pointer to the length of the resulting array
  */
-void splitStr(char *str, char c, char ***result, int *length) {
-    int n = (int)strlen(str);
-    int number = 1;
-    int i;
-    for (i = 0; i < n; i++) {
-        number += c == str[i];
+void split_str(char *str, char c, char ***result, int *length) {
+    if (!str || !result || !length) {
+        return; // Invalid input
     }
-    *length = number;
-    *result = (char **)malloc(sizeof(char *) * number);
 
-    char split_str[] = {c};
-    char *token;
-    token = strtok(str, split_str);
-    i = 0;
-    while (token != NULL) {
-        (*result)[i] = (char *)malloc(sizeof(char) * ((int)strlen(token) + 1));
-        strcpy((*result)[i], token);
-        token = strtok(NULL, split_str);
-        i++;
-    }
-}
-
-/**
- * @brief free splitStr
- *
- * @param result
- * @param length
- * @return int
- */
-int freeSplitStr(char ***result, int length) {
-    for (int i = 0; i < length; i++) {
-        free((*result)[i]);
-    }
-    free(*result);
-    *result = NULL;
-    return 0;
-}
-
-/**
- * @brief 找到字符串中一个字符最先出现的位置
- *
- * @param str
- * @param c
- * @param match_number 0 表示第一个, -1 表示最后一个, 其余表示匹配的个数
- * @return int 未找到返回-1
- */
-int findChar(const char *str, char c, int match_number) {
-    int n = (int)strlen(str);
-    int pos = -1;
     int count = 0;
-    for (int i = 0; i < n; i++) {
-        if (str[i] == c) {
-            if (match_number == 0) {
-                return i;
-            } else {
-                pos = i;
-                count++;
-                if (match_number != -1 && count == match_number) {
-                    return pos;
-                }
-            }
+    char *temp = str;
+    char *start = NULL;
+
+    // First pass: Count the number of substrings
+    while (*temp) {
+        if (*temp == c) {
+            count++;
         }
+        temp++;
     }
-    if (match_number == -1) {
-        return pos;
+    count++; // Account for the last substring after the final delimiter
+
+    // Allocate memory for result
+    *result = (char **)malloc(count * sizeof(char *));
+    if (!*result) {
+        perror("Failed to allocate memory");
+        *length = 0;
+        return;
     }
-    return -1;
+
+    *length = count;
+    temp = str;
+    count = 0;
+
+    // Second pass: Extract substrings
+    while (*temp) {
+        if (*temp == c || *temp == '\0') {
+            if (start) {
+                int substr_len = temp - start;
+                (*result)[count] = (char *)malloc((substr_len + 1) * sizeof(char));
+                if (!(*result)[count]) {
+                    perror("Failed to allocate memory");
+                    *length = 0;
+                    return;
+                }
+                strncpy((*result)[count], start, substr_len);
+                (*result)[count][substr_len] = '\0'; // Null-terminate the string
+                count++;
+                start = NULL;
+            }
+        } else if (!start) {
+            start = temp; // Mark the beginning of a substring
+        }
+        temp++;
+    }
+
+    // Handle the last substring
+    if (start) {
+        int substr_len = temp - start;
+        (*result)[count] = (char *)malloc((substr_len + 1) * sizeof(char));
+        if (!(*result)[count]) {
+            perror("Failed to allocate memory");
+            *length = 0;
+            return;
+        }
+        strncpy((*result)[count], start, substr_len);
+        (*result)[count][substr_len] = '\0';
+    }
+}
+
+/**
+ * @brief Free the memory allocated for the result array
+ * 
+ * @param result The array of strings to free
+ * @param length The number of strings in the array
+ */
+void free_split_str(char **result, int length) {
+    for (int i = 0; i < length; i++) {
+        free(result[i]);
+    }
+    free(result);
 }
 
 /**

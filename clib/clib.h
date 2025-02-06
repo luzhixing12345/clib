@@ -9,3 +9,4 @@
 #include "utils.h"
 #include "keyboard.h"
 #include "shell.h"
+#include "string.h"

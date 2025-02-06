@@ -39,3 +39,24 @@ INFO() {
 SPLIT() {
     echo "-----------------------------------------------------------"
 }
+
+# 定义测试函数
+run_test() {
+    local cmd="$1"
+    local expected="$2"
+    local actual
+
+    # 运行命令并捕获输出
+    actual=$(bash -c "$cmd" 2>&1)
+
+    # 比较输出
+    if [[ "$actual" == "$expected" ]]; then
+        echo "PASS: $cmd"
+    else
+        echo "FAIL: $cmd"
+        ERR "Expected output:"
+        ERR "$expected"
+        ERR "Actual output:"
+        ERR "$actual"
+    fi
+}
