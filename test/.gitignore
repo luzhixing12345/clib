@@ -6,4 +6,5 @@
 !log/
 !argparse/
 !hashtable/
+!shell/
 !*.sh

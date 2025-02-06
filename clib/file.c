@@ -2,11 +2,10 @@
 #include "file.h"
 
 #include <dirent.h>
+#include <mntent.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/stat.h>
-#include <unistd.h>
 
 /**
  * @brief delete dir recursively
@@ -68,4 +67,25 @@ int del_dir(const char *path) {
 
 int path_exist(const char *path) {
     return access(path, F_OK) == 0;
+}
+
+
+bool is_mounted(struct stat *st) {
+    struct stat st_buf;
+    struct mntent *mnt;
+    FILE *f;
+
+    f = setmntent("/proc/mounts", "r");
+    if (!f)
+        return false;
+
+    while ((mnt = getmntent(f)) != NULL) {
+        if (stat(mnt->mnt_fsname, &st_buf) == 0 && S_ISBLK(st_buf.st_mode) && st->st_rdev == st_buf.st_rdev) {
+            fclose(f);
+            return true;
+        }
+    }
+
+    fclose(f);
+    return false;
 }

@@ -1,9 +1,11 @@
 
 #pragma once
 
-#include "file.h"
-#include "log.h"
-#include "utils.h"
 #include "argparse.h"
-#include "tqdm.h"
+#include "file.h"
 #include "hashtable.h"
+#include "log.h"
+#include "tqdm.h"
+#include "utils.h"
+#include "keyboard.h"
+#include "shell.h"
