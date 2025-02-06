@@ -6,17 +6,20 @@
 
 clib 是一个小型的 C 工具库, 用精简的方式实现了一些 C 标准库没有提供但是日常开发中常见的功能需求, 包括
 
-- 日志(线程安全)
+- 日志
 - 命令行参数解析
 - hashtable
 - 终端彩色打印
 - 目录, 文件相关的处理(判断文件存在, 递归删除目录...)
+- tqdm(进度条)
 
 本项目大部分代码是笔者从网络上搜集到的其他大佬开发好的轮子并修改封装为简单易用的 API, 绝赞维护更新中(๑˃̵ᴗ˂̵)و
 
 ## 示例
 
-日志(thread safe)
+### 日志(thread safe)
+
+方便好记, 和 printf 一样流畅的体验, 有颜色有位置, vscode 一步定位
 
 ```c
 #include <clib/clib.h>
@@ -31,10 +34,10 @@ int main(int argc, char **argv) {
 ```
 
 ![image](https://raw.githubusercontent.com/learner-lu/picbed/master/20250127142451.png)
----
 
-参数解析
+### 参数解析
 
+不要每次都花费大量的时间在处理参数上面了, 几个宏快速绑定参数, 自动生成 help 文档
 
 ```c
 #include <clib/clib.h>
@@ -88,9 +91,9 @@ int main(int argc, const char **argv) {
 ```
 ![20250130022533](https://raw.githubusercontent.com/learner-lu/picbed/master/20250130022533.png)
 
----
+### hashtable(thread safe)
 
-hashtable(thread safe)
+还在苦于 C 用不了 unordered_map? 给你把 C 的 API 封装好了, 直接用就可以了
 
 ```c
 #include <clib/clib.h>
@@ -113,6 +116,29 @@ int main(int argc, const char* argv[]) {
 	ht_destroy(&table);
 }
 ```
+
+### tqdm(进度条)
+
+简单好用, 以及高度自定义的进度条
+
+```c
+#include <clib/clib.h>
+#include <unistd.h>  // For usleep
+
+int main() {
+    int iter = 300;
+    struct tqdm progress;
+
+    init_tqdm(&progress, iter);
+    for (int i = 0; i < iter; i++) {
+        update_tqdm(&progress, i);
+        usleep(10000);
+    }
+    return 0;
+}
+```
+
+![iokl8](https://raw.githubusercontent.com/learner-lu/picbed/master/iokl8.gif)
 
 ## 安装(TODO)
 
@@ -153,6 +179,15 @@ bear -- make
 ## 文档
 
 [libc document](https://luzhixing12345.github.io/clib/)
+
+## 测试
+
+```bash
+make
+cd test
+make
+./test.sh
+```
 
 ## 参考
 
