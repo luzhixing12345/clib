@@ -12,6 +12,7 @@ clib 是一个小型的 C 工具库, 用精简的方式实现了一些 C 标准�
 - 终端彩色打印
 - 目录, 文件相关的处理(判断文件存在, 递归删除目录...)
 - tqdm(进度条)
+- 简易内嵌shell
 
 本项目大部分代码是笔者从网络上搜集到的其他大佬开发好的轮子并修改封装为简单易用的 API, 绝赞维护更新中(๑˃̵ᴗ˂̵)و
 
@@ -139,6 +140,33 @@ int main() {
 ```
 
 ![iokl8](https://raw.githubusercontent.com/learner-lu/picbed/master/iokl8.gif)
+
+### shell
+
+想为你的程序添加一个内置的控制台? 只是简单处理一些命令, 一个完整的 shell 太过臃肿了, 来试试这个麻雀虽小五脏俱全的 shell 吧
+
+```c
+#include <clib/clib.h>
+
+int main(int argc, char **argv) {
+    struct shell *shell = create_shell("> ");
+    init_shell(shell);
+
+    while (shell_run(shell)) {
+        struct shell_event *event = &shell->event;
+        if (event->argc > 0 && !strcmp(event->argv[0], "exit")) {
+            break;
+        }
+        for (int i = 0; i < event->argc; i++) {
+            printf("%s ", event->argv[i]);
+        }
+        printf("\n");
+    }
+
+    free_shell(shell);
+    return 0;
+}
+```
 
 ## 安装(TODO)
 

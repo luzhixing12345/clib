@@ -16,6 +16,11 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <termios.h>
+#include <unistd.h>
+
+// 全局变量存储动态获取的控制字符
+static struct termios orig_termios;
 
 #define DEFUALT_LS_COLORS                                                        \
     "rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;" \
@@ -279,4 +284,23 @@ const char *filename_print(const char *file_name, const char *full_path, dircolo
     }
     sprintf(result, "\033[%sm%s%s", color_code, file_name, TERM_FONT_DEFAULT);
     return result;
+}
+
+void enable_raw_mode() {
+    struct termios raw;
+
+    // 获取当前终端设置
+    tcgetattr(STDIN_FILENO, &orig_termios);
+
+    raw = orig_termios;
+    raw.c_lflag &= ~(ECHO | ICANON);  // 关闭回显和行缓冲
+    raw.c_cc[VMIN] = 1;               // 每次读取一个字符
+    raw.c_cc[VTIME] = 0;              // 无超时
+
+    tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw);
+}
+
+// 恢复终端设置
+void disable_raw_mode() {
+    tcsetattr(STDIN_FILENO, TCSAFLUSH, &orig_termios);
 }

@@ -5,7 +5,8 @@
 
 #include "string.h"
 
-
+void enable_raw_mode();
+void disable_raw_mode();
 #define CURSOR_LEFT(x)         \
     {                          \
         printf("\033[%dD", x); \
@@ -32,10 +33,17 @@
         fflush(stdout);    \
     }
 
-#define CURSOR_RESET() \
-    {                  \
-        printf("\033[H"); \
+#define CLEAR_LINE()       \
+    {                      \
+        printf("\033[2K"); \
+        printf("\033[G");  \
         fflush(stdout);    \
+    }
+
+#define CURSOR_RESET()    \
+    {                     \
+        printf("\033[H"); \
+        fflush(stdout);   \
     }
 
 // \b 退格 + 空格 + 退格
