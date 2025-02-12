@@ -1,7 +1,6 @@
 
 
-#ifndef XTERM_H
-#define XTERM_H
+#pragma once
 
 #include "string.h"
 
@@ -40,6 +39,12 @@ void disable_raw_mode();
         fflush(stdout);    \
     }
 
+#define CLEAR_CHAR_AFTER(x)    \
+    {                          \
+        printf("\033[%dX", x); \
+        fflush(stdout);        \
+    }
+
 #define CURSOR_RESET()    \
     {                     \
         printf("\033[H"); \
@@ -70,6 +75,9 @@ void disable_raw_mode();
 #define TERM_COLOR_WHITE       "\033[37m"
 #define TERM_COLOR_EXTEND      "\033[38m"  // 前景色扩展
 #define TERM_COLOR_DEFAULT     "\033[39m"
+#define TERM_COLOR_GREY        "\033[90m"
+
+#define printf_grey(fmt, ...)  printf(TERM_COLOR_GREY fmt TERM_COLOR_DEFAULT, ##__VA_ARGS__)
 
 typedef struct {
     char *font_type;
@@ -128,5 +136,3 @@ void free_dc_database(dircolor_database *database);
  * @return char*
  */
 const char *filename_print(const char *file_name, const char *full_path, dircolor_database *database);
-
-#endif  // XTERM_H

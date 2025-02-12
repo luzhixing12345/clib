@@ -168,6 +168,8 @@ int main(int argc, char **argv) {
 }
 ```
 
+> event 获取到命令行参数之后可以用 argparse 解析哦
+
 ## 安装(TODO)
 
 ```bash

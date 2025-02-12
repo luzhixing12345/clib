@@ -40,6 +40,7 @@ struct shell {
 
     // auto complete
     bool enable_history_search_complete;
+    char *history_p;
 };
 
 struct shell *create_shell(char *prompt);

@@ -48,6 +48,7 @@ static void save_history(struct shell *shell) {
     FILE *fp = fopen(shell->history_file, "w");
     if (!fp) {
         perror("fopen");
+        printf("%s\n", shell->history_file);
         return;
     }
     for (int i = 0; i < shell->history_len; i++) {
@@ -55,6 +56,25 @@ static void save_history(struct shell *shell) {
         fputc('\n', fp);
     }
     fclose(fp);
+}
+
+static void try_autocomplete(struct shell *shell) {
+    // only try autocomplete when cursor is at the end
+    if (shell->cursor_idx != shell->cmd_idx || shell->cmd_idx == 0)
+        return;
+
+    for (int i = shell->history_len - 1; i >= 0; i--) {
+        if (strncmp(shell->history_buf[i], shell->cmd_buf, shell->cmd_idx) == 0) {
+            shell->history_p = shell->history_buf[i] + shell->cmd_idx;
+            // 如果是全部匹配直接返回
+            if (shell->cmd_idx == (int)strlen(shell->history_buf[i])) {
+                return;
+            }
+            printf_grey("%s", shell->history_p);
+            CURSOR_LEFT((int)strlen(shell->history_p));
+            return;
+        }
+    }
 }
 
 static KeyBind handle_control_serial(struct keybind_t *keybind, void *data) {
@@ -210,6 +230,13 @@ static KeyBind handle_clear_screen(struct keybind_t *keybind, void *data) {
 
 static KeyBind handle_tabcomplete(struct keybind_t *keybind, void *data) {
     struct shell *shell = data;
+    if (shell->history_p) {
+        strcat(shell->cmd_buf, shell->history_p);
+        shell->cmd_idx += (int)strlen(shell->history_p);
+        shell->cursor_idx = shell->cmd_idx;
+        printf("%s", shell->history_p);
+        fflush(stdout);
+    }
     return keybind->key;
 }
 
@@ -253,22 +280,9 @@ static KeyBind handle_backspace(struct keybind_t *keybind, void *data) {
         printf(" \b");
         CURSOR_LEFT(shell->cmd_idx - shell->cursor_idx);
     }
-
+    try_autocomplete(shell);
     return keybind->key;
 }
-
-// static void sigint_handler(int sig) {
-//     sigset_t mask_all, prev;
-//     sigfillset(&mask_all);
-//     sigprocmask(SIG_SETMASK, &mask_all, &prev);
-//     signal_received = SIGINT;
-//     sigprocmask(SIG_SETMASK, &prev, NULL);
-//     return;
-// }
-
-// static void init_signal() {
-//     signal(SIGINT, sigint_handler);
-// }
 
 int shell_run(struct shell *shell) {
     char c;
@@ -277,6 +291,11 @@ int shell_run(struct shell *shell) {
     fflush(stdout);
     while (1) {
         read(STDIN_FILENO, &c, 1);
+
+        if (shell->history_p) {
+            CLEAR_CHAR_AFTER((int)strlen(shell->history_p));
+        }
+
         int flag = 0;
         for (int i = 0; i < shell->keybinds_len; i++) {
             if (c == (char)shell->keybinds[i].key) {
@@ -310,6 +329,7 @@ int shell_run(struct shell *shell) {
             write(STDOUT_FILENO, shell->cmd_buf + shell->cursor_idx - 1, shell->cmd_idx - shell->cursor_idx + 1);
             CURSOR_LEFT(shell->cmd_idx - shell->cursor_idx);
         }
+        try_autocomplete(shell);
     }
 }
 
