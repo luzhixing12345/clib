@@ -170,7 +170,7 @@ static KeyBind handle_exit_shell(struct keybind_t *keybind, void *data) {
 static KeyBind handle_clear_cmdline_before_cursor(struct keybind_t *keybind, void *data) {
     struct shell *shell = data;
     // 将当前光标位置及之后的字符前移到开头
-    for (int i = 0; i < shell->cursor_idx; i++) {
+    for (int i = 0; i < shell->cmd_idx - shell->cursor_idx; i++) {
         shell->cmd_buf[i] = shell->cmd_buf[i + shell->cursor_idx];
     }
     CURSOR_LEFT(shell->cursor_idx);
@@ -230,8 +230,8 @@ static KeyBind handle_clear_screen(struct keybind_t *keybind, void *data) {
 
 static KeyBind handle_tabcomplete(struct keybind_t *keybind, void *data) {
     struct shell *shell = data;
-    if (shell->history_p) {
-        strcat(shell->cmd_buf, shell->history_p);
+    if (shell->history_p && shell->cmd_idx == shell->cursor_idx) {
+        strncpy(shell->cmd_buf + shell->cmd_idx, shell->history_p, (int)strlen(shell->history_p));
         shell->cmd_idx += (int)strlen(shell->history_p);
         shell->cursor_idx = shell->cmd_idx;
         printf("%s", shell->history_p);
@@ -292,7 +292,7 @@ int shell_run(struct shell *shell) {
     while (1) {
         read(STDIN_FILENO, &c, 1);
 
-        if (shell->history_p) {
+        if (shell->history_p && shell->cmd_idx == shell->cursor_idx) {
             CLEAR_CHAR_AFTER((int)strlen(shell->history_p));
         }
 

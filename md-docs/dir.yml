@@ -6,6 +6,7 @@
 - hashtable: 5
 - 终端彩色输出: 6
 - 进度条: 7
+- shell: 8
 工具库:
 - unicode: 2
 libc:

@@ -149,7 +149,7 @@ lib: $(STATIC_LIB)
 .PHONY: lib
 
 EXECUTABLES = $(OBJS:.o=)
-%: %.o
+%: %.o ../clib/libclib.a
 	$(E) -e "  LINK    \033[1;32m" $@ "\033[0m"
 	$(Q) $(CC) $< $(LDFLAGS) $(LIBS) -o $@
 

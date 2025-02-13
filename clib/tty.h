@@ -39,6 +39,7 @@ void disable_raw_mode();
         fflush(stdout);    \
     }
 
+// 删除光标之后的 x 个字符
 #define CLEAR_CHAR_AFTER(x)    \
     {                          \
         printf("\033[%dX", x); \
