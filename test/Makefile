@@ -34,6 +34,17 @@ SRC_EXT     	:= c
 STATIC_LIB 		:= $(SRC_PATH)/lib$(LIBNAME).a
 
 # default: [all, lib, each]
+# ------------------------- #
+# all: compile all the files under SRC_PATH and generate TARGET
+#      $ gcc $(SRC_PATH)/*.$(SRC_EXT) -o $(TARGET)
+# lib: compile all the files under SRC_PATH and generate LIBNAME(a)
+#      $ gcc $(SRC_PATH)/*.$(SRC_EXT) -o *.o
+#      $ ar rcs lib$(LIBNAME).a *.o
+# each: compile each file under SRC_PATH and generate each file
+#      $ gcc $(SRC_PATH)/file1.$(SRC_EXT) -o file1
+#      $ gcc $(SRC_PATH)/file2.$(SRC_EXT) -o file2
+#      ...
+# ------------------------- #
 default: each
 
 # ------------------------- #

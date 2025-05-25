@@ -101,6 +101,12 @@ static void check_valid_options(argparse *parser) {
         }
         // 检查长参数合法性
         if (option->long_name) {
+            if (!strcmp(option->long_name, "--") && !(parser->flag & ARGPARSE_ENABLE_CMD)) {
+                fprintf(stderr,
+                        "%s: long_name should not be --, add ARGPARSE_ENABLE_CMD flag if you want to support -- cmd\n",
+                        __ARGS_BUILD_ERROR);
+                exit(FORMAT_ERROR);
+            }
             char *l_name = splice(option->long_name, 2, -1);
             char *p = l_name;
 
@@ -717,7 +723,6 @@ void argparse_parse(argparse *parser, int argc, const char **argv) {
                     free_argparse(parser);
                     exit(FORMAT_ERROR);
                 }
-
             } else {
                 if (option->type == __ARGPARSE_OPT_BOOLEAN) {
                     option->match = 1;
@@ -733,23 +738,34 @@ void argparse_parse(argparse *parser, int argc, const char **argv) {
                     free_argparse(parser);
                     exit(FORMAT_ERROR);
                 }
-                // if (argv[i + 1][0] == '-' && !(parser->flag &
-                // ARGPARSE_IGNORE_WARNING)) {
-                //     fprintf(stderr,
-                //             "%s: [%s] will be passed as the argument for [%s]\n",
-                //             __ARGS_PARSE_WARNING,
-                //             argv[i + 1],
-                //             argv[i]);
-                // }
                 if (option->value) {
                     free(option->value);
                 }
-                option->value = (char *)malloc(sizeof(char) * ((int)strlen(argv[i + 1]) + 1));
-                strcpy(option->value, argv[i + 1]);
-                option->pos = match_pos++;
-                value_pass(parser, option);
-                // printf("matched [%s]:[%s]\n", option->long_name, argv[i + 1]);
-                i++;
+                if (!strcmp(option->long_name, "--") && parser->flag & ARGPARSE_ENABLE_CMD) {
+                    // 如果匹配到 -- 那么停止解析, 把后面所有的参数都赋给 option->value
+                    int total_len = 0;
+                    for (int j = i + 1; j < argc; j++) {
+                        total_len += (int)strlen(argv[j]) + 1;
+                    }
+                    option->value = (char *)malloc(sizeof(char) * total_len);
+                    memset(option->value, 0, sizeof(char) * total_len);
+                    option->pos = match_pos++;
+                    for (int j = i + 1; j < argc; j++) {
+                        strcat(option->value, argv[j]);
+                        if (j != argc - 1) {
+                            strcat(option->value, " ");
+                        }
+                    }
+                    value_pass(parser, option);
+                    break;
+                } else {
+                    option->value = (char *)malloc(sizeof(char) * ((int)strlen(argv[i + 1]) + 1));
+                    strcpy(option->value, argv[i + 1]);
+                    option->pos = match_pos++;
+                    value_pass(parser, option);
+                    // printf("matched [%s]:[%s]\n", option->long_name, argv[i + 1]);
+                    i++;
+                }
             }
             continue;
         }

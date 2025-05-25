@@ -77,7 +77,8 @@ enum argparse_flag {
     ARGPARSE_ENABLE_STICK = 1 << 1,      // 允许参数粘连 -O1 -Iinclude/
     ARGPARSE_ENABLE_EQUAL = 1 << 2,      // 允许参数等号 -i=123
     ARGPARSE_ENABLE_ARG_STICK = 1 << 3,  // 允许boolean类型参数粘连
-    ARGPARSE_SORT = 1 << 4               // 将参数按照字典序排序
+    ARGPARSE_SORT = 1 << 4,              // 将参数按照字典序排序
+    ARGPARSE_ENABLE_CMD = 1 << 5,        // 允许命令行参数 ./main -- cmd
 };
 
 typedef struct {

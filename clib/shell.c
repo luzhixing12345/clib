@@ -2,7 +2,6 @@
 #include "shell.h"
 
 #include <ctype.h>
-#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -13,7 +12,6 @@
 #include "keyboard.h"
 #include "log.h"
 #include "tty.h"
-#include "utils.h"
 
 static struct keybind_t keybinds[N_KEYBIND];
 
@@ -413,15 +411,13 @@ void free_shell(struct shell *shell) {
     if (!shell) {
         return;
     }
-
-    free(shell);
     if (shell->args.argv) {
         free_cmd_arg(&shell->args);
     }
-
     if (shell->history_file) {
         save_history(shell);
     }
+    free(shell);
 
     disable_raw_mode();
 }

@@ -17,7 +17,7 @@ body {
     -webkit-text-size-adjust: 100%;
     line-height: 1.5;
     /* color: #24292e; */
-    font-family: Consolas, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+    font-family: Monaco, Consolas, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
     font-size: 16px;
     letter-spacing: 0.02em;
     line-height: 1.5;
@@ -120,7 +120,7 @@ blockquote {
 .markdown-body code,
 .markdown-body kbd,
 .markdown-body pre {
-    font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+    font-family: Monaco, Consolas, Liberation Mono, Menlo, monospace;
     font-size: 15px;
 }
 
@@ -200,32 +200,44 @@ blockquote {
     cursor: pointer;
 }
 
+/* ul lo related css */
 
-/* .markdown-body ol ol,
-.markdown-body ul ol {
-    list-style-type: lower-roman;
+.markdown-body ul {
+    margin-top: 0;
+    margin-bottom: 8px;
+    padding-left: 1.5em;
 }
 
-.markdown-body ol ol ol,
-.markdown-body ol ul ol,
-.markdown-body ul ol ol,
-.markdown-body ul ul ol {
-    list-style-type: lower-alpha;
-} */
-
-.markdown-body ul,
 .markdown-body ol {
     margin-top: 0;
     margin-bottom: 8px;
-    padding-left: 2em;
+    padding-left: 2.3em;
+}
+
+
+.markdown-body ol ul,
+.markdown-body ul ul {
+    padding-left: 1em;
+    margin-top: 10px;
 }
 
 .markdown-body ol ol,
-.markdown-body ol ul,
-.markdown-body ul ol,
-.markdown-body ul ul {
-    margin-top: 0;
-    margin-bottom: 0;
+.markdown-body ul ol {
+    padding-left: 1.75em;
+    margin-top: 10px;
+}
+
+.markdown-body ul p,
+.markdown-body ol p {
+    margin-bottom: 10px;
+}
+
+.markdown-body ol li blockquote {
+    margin-top: 10px;
+}
+
+.markdown-body ul li blockquote {
+    margin-top: 10px;
 }
 
 .markdown-body li {
@@ -240,9 +252,20 @@ blockquote {
     margin-top: 0.25em;
 }
 
-ul>li>ul>li {
+ul>li>ul>li,
+ol>li>ol>li,
+ul>li>ol>li,
+ol>li>ul>li {
+    margin-top: 0;
     margin-top: 10px;
-    /* 通过调整10px来设置上边距大小 */
+}
+
+.markdown-body ol li blockquote {
+    margin-top: 10px;
+}
+
+.markdown-body ul li blockquote {
+    margin-top: 10px;
 }
 
 /* ul 后面的文字加一个间距 */
@@ -342,7 +365,7 @@ ul>li>ul>li {
     padding: 3px;
     opacity: 0.9;
     border: 1px solid rgba(149, 157, 165, 0.2);
-    border-radius: 5px;
+    border-radius: 2px;
     background-color: rgb(196, 196, 196);
     z-index: 1;
 }
@@ -350,27 +373,14 @@ ul>li>ul>li {
 .markdown-body pre #code_copy:hover {
     background-color: #ffffff;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-    border-radius: 5px;
+    border-radius: 2px;
 }
 
-.markdown-body ol ul,
-.markdown-body ul ol {
-    padding-left: 1em;
-    margin-top: 10px;
-}
-
-.markdown-body ol li blockquote {
-    margin-top: 10px;
-}
-
-.markdown-body ul li blockquote {
-    margin-top: 10px;
-}
 
 .markdown-body kbd {
     display: inline-block;
     padding: 5px 5px;
-    font: 11px "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    font: 11px "Monaco", Consolas, "Liberation Mono", Menlo, Courier, monospace;
     line-height: 10px;
     color: #444d56;
     vertical-align: middle;
@@ -439,7 +449,7 @@ ul>li>ul>li {
 }
 
 .change-article {
-    font-family: Consolas, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+    font-family: Monaco, Consolas, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
     border: 0;
     width: 100%;
     margin-right: 20%;
@@ -484,7 +494,7 @@ ul>li>ul>li {
 }
 
 .dir-tree {
-    font-family: Consolas, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+    font-family: Monaco, Consolas, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
     position: fixed;
     left: 6%;
     top: 10%;
@@ -506,7 +516,7 @@ ul>li>ul>li {
 }
 
 .dir-tree ul {
-    font-family: Consolas, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+    font-family: Monaco, Consolas, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
     font-size: 18px;
     letter-spacing: 0.02em;
     margin-top: 25px;
@@ -526,7 +536,7 @@ ul>li>ul>li {
 }
 
 .dir-tree ul ul li {
-    font-family: Consolas, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+    font-family: Monaco, Consolas, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
     letter-spacing: 0.02em;
     font-size: 16px;
     margin-left: -10px;
@@ -630,7 +640,7 @@ ul>li>ul>li {
 .markdown-body ul:has(input[type="checkbox"]) {
     list-style-type: none;
     padding-left: 0.5em;
-    /* margin-bottom: 8px; */
+    margin-bottom: 8px;
 }
 
 .markdown-body input[type="checkbox"] {
@@ -646,7 +656,7 @@ ul>li>ul>li {
     width: 15%;
     left: 83%;
     top: 10%;
-    font-family: Consolas, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+    font-family: Monaco, Consolas, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
     font-size: 18px;
     letter-spacing: 0.02em;
     scrollbar-width: none;
@@ -677,7 +687,7 @@ ul>li>ul>li {
 }
 
 .header-navigator ul {
-    font-family: Consolas, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+    font-family: Monaco, Consolas, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
     font-size: 14px;
     letter-spacing: 0.02em;
     margin-top: 10px;
@@ -688,7 +698,7 @@ ul>li>ul>li {
 }
 
 .header-navigator ul ul {
-    margin-left: -20px;
+    margin-left: -30px;
 }
 
 .header-navigator a {

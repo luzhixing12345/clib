@@ -11,3 +11,4 @@
 !file
 !string
 !*.sh
+!scripts/
