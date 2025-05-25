@@ -4,7 +4,7 @@
 
 /**
  * @brief Split a string by a specified delimiter
- * 
+ *
  * @param str The input string to be split
  * @param c The delimiter character
  * @param result Pointer to the output array of strings
@@ -12,7 +12,7 @@
  */
 void split_str(char *str, char c, char ***result, int *length) {
     if (!str || !result || !length) {
-        return; // Invalid input
+        return;  // Invalid input
     }
 
     int count = 0;
@@ -26,7 +26,7 @@ void split_str(char *str, char c, char ***result, int *length) {
         }
         temp++;
     }
-    count++; // Account for the last substring after the final delimiter
+    count++;  // Account for the last substring after the final delimiter
 
     // Allocate memory for result
     *result = (char **)malloc(count * sizeof(char *));
@@ -52,12 +52,12 @@ void split_str(char *str, char c, char ***result, int *length) {
                     return;
                 }
                 strncpy((*result)[count], start, substr_len);
-                (*result)[count][substr_len] = '\0'; // Null-terminate the string
+                (*result)[count][substr_len] = '\0';  // Null-terminate the string
                 count++;
                 start = NULL;
             }
         } else if (!start) {
-            start = temp; // Mark the beginning of a substring
+            start = temp;  // Mark the beginning of a substring
         }
         temp++;
     }
@@ -78,7 +78,7 @@ void split_str(char *str, char c, char ***result, int *length) {
 
 /**
  * @brief Free the memory allocated for the result array
- * 
+ *
  * @param result The array of strings to free
  * @param length The number of strings in the array
  */
@@ -126,7 +126,7 @@ void trim(char **str_p) {
  * @param end 终点index(包含), end = -1 表示结尾
  * @return char*(need free)
  */
-char *splice(const char *str, int start, int end) {
+char *splice_str(const char *str, int start, int end) {
     if (end == -1) {
         end = (int)strlen(str) - 1;
     }

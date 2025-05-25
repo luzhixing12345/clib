@@ -7,7 +7,7 @@
  *@Github: luzhixing12345
  */
 
-// usage: https://github.com/luzhixing12345/libc
+// usage: https://github.com/luzhixing12345/clib
 
 #include "argparse.h"
 
@@ -22,7 +22,7 @@
  * @param end 终点index(包含), end = -1 表示结尾
  * @return char*(need free)
  */
-static char *splice(const char *str, int start, int end) {
+static char *splice_str(const char *str, int start, int end) {
     if (end == -1) {
         end = (int)strlen(str) - 1;
     }
@@ -107,7 +107,7 @@ static void check_valid_options(argparse *parser) {
                         __ARGS_BUILD_ERROR);
                 exit(FORMAT_ERROR);
             }
-            char *l_name = splice(option->long_name, 2, -1);
+            char *l_name = splice_str(option->long_name, 2, -1);
             char *p = l_name;
 
             // long_name 合法性: a-z-_
@@ -576,7 +576,7 @@ static void value_pass(argparse *parser, argparse_option *option) {
             new_p = (char **)realloc(*(char ***)option->p, sizeof(char *) * match_number);
         }
         *(char ***)option->p = new_p;
-        char *value_str = splice(option->value, 0, -1);
+        char *value_str = splice_str(option->value, 0, -1);
         (*(char ***)option->p)[match_number - 1] = value_str;
 
     } else if (option->type == __ARGPARSE_OPT_INTS || option->type == __ARGPARSE_OPT_INTS_GROUP) {
@@ -636,7 +636,7 @@ void argparse_parse(argparse *parser, int argc, const char **argv) {
                 if (parser->flag & ARGPARSE_ENABLE_EQUAL) {
                     int equal_pos = strchr(argv[i], '=') ? strchr(argv[i], '=') - argv[i] : -1;
                     if (equal_pos != -1) {
-                        char *name = splice(argv[i], 0, equal_pos - 1);
+                        char *name = splice_str(argv[i], 0, equal_pos - 1);
                         if ((int)strlen(name) >= 2 && name[0] == '-') {
                             if (name[1] == '-') {
                                 option = check_argparse_loptions(parser, name);
@@ -650,7 +650,7 @@ void argparse_parse(argparse *parser, int argc, const char **argv) {
                             if (option->value) {
                                 free(option->value);
                             }
-                            char *value = splice(argv[i], equal_pos + 1, -1);
+                            char *value = splice_str(argv[i], equal_pos + 1, -1);
                             option->value = value;
                             option->pos = match_pos++;
                             value_pass(parser, option);
@@ -659,7 +659,7 @@ void argparse_parse(argparse *parser, int argc, const char **argv) {
                     }
                 }
                 if (parser->flag & ARGPARSE_ENABLE_STICK) {
-                    char *short_name = splice(argv[i], 0, 1);
+                    char *short_name = splice_str(argv[i], 0, 1);
                     option = check_argparse_soptions(parser, short_name);
                     free(short_name);
                     if (option) {
@@ -668,7 +668,7 @@ void argparse_parse(argparse *parser, int argc, const char **argv) {
                             if (option->value) {
                                 free(option->value);
                             }
-                            char *value = splice(argv[i], 2, -1);
+                            char *value = splice_str(argv[i], 2, -1);
                             option->value = value;
                             option->pos = match_pos++;
                             value_pass(parser, option);

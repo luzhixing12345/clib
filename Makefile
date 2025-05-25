@@ -63,11 +63,10 @@ OBJCOPY		:= objcopy
 #          FLAGS            #
 # ------------------------- #
 CFLAGS 			:= -DCONFIG_VERSION=\"$(VERSION).$(PATCHLEVEL).$(SUBLEVEL)\" -g
+INCLUDE_PATH 	:= 
 LDFLAGS 		:= 
-LIBS			:= 
 DEFINES     	:= 
 THIRD_LIB   	:= 
-INCLUDE_PATH 	:= 
 # ------------------------- #
 
 ifneq ($(strip $(INCLUDE_PATH)),)
@@ -140,7 +139,7 @@ debug: all
 # compile program bin
 $(PROGRAM): $(OBJS) $(OBJS_DYNOPT) $(OTHEROBJS) $(GUEST_OBJS)
 	$(E) -e "  LINK    \033[1;32m" $@ "\033[0m"
-	$(Q) $(CC) $(CFLAGS) $(OBJS) $(OBJS_DYNOPT) $(OTHEROBJS) $(GUEST_OBJS) $(LDFLAGS) $(LIBS) $(LIBS_DYNOPT) $(LIBFDT_STATIC) -o $@
+	$(Q) $(CC) $(CFLAGS) $(OBJS) $(OBJS_DYNOPT) $(OTHEROBJS) $(GUEST_OBJS) $(LDFLAGS) $(LIBS_DYNOPT) $(LIBFDT_STATIC) -o $@
 	$(E) "  binary program $(PROGRAM) is ready."
 
 # compile static lib
@@ -162,7 +161,7 @@ lib: $(STATIC_LIB)
 EXECUTABLES = $(OBJS:.o=)
 %: %.o
 	$(E) -e "  LINK    \033[1;32m" $@ "\033[0m"
-	$(Q) $(CC) $(CFLAGS) $< $(LDFLAGS) $(LIBS) -o $@
+	$(Q) $(CC) $(CFLAGS) $< $(LDFLAGS) -o $@
 
 each: $(EXECUTABLES)
 .PHONY: each
@@ -207,7 +206,6 @@ config:
 	$(E) "  [SRC FILES]: $(shell echo $(SRC) | tr '\n' ' ')"
 	$(E) "  [CFLAGS]: $(CFLAGS)"
 	$(E) "  [LDFLAGS]: $(LDFLAGS)"
-	$(E) "  [LIBS]: $(LIBS)"
 
 help:
 	$(E) ""

@@ -33,6 +33,6 @@ void trim(char **str_p);
  * @param end 终点index(包含), end = -1 表示结尾
  * @return char*(need free)
  */
-char *splice(const char *str, int start, int end);
+char *splice_str(const char *str, int start, int end);
 
 #endif  // XSTRING_H

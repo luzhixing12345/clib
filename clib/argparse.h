@@ -7,12 +7,10 @@
  *@Github: luzhixing12345
  */
 
-// usage: https://github.com/luzhixing12345/libc
+// usage: https://github.com/luzhixing12345/clib
 
-#ifndef XARGPARSE_H
-#define XARGPARSE_H
-
-#define VERSION "XBOX v0.0.1"
+#ifndef ARGPARSE_H
+#define ARGPARSE_H
 
 // #include <stdint.h>
 #include <ctype.h>
@@ -199,4 +197,4 @@ int arg_match_pos(argparse *parser, char *name);
  */
 void free_argparse(argparse *parser);
 
-#endif  // XARGPARSE_H
+#endif  // ARGPARSE_H

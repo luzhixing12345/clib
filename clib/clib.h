@@ -1,6 +1,10 @@
 
 #pragma once
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "argparse.h"
 #include "file.h"
 #include "hashtable.h"
@@ -10,3 +14,7 @@
 #include "keyboard.h"
 #include "shell.h"
 #include "string.h"
+
+#ifdef __cplusplus
+}
+#endif
