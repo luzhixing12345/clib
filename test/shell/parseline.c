@@ -37,6 +37,8 @@ int main(int argc, char **argv) {
         ASSERT(strcmp(args2.argv[i], expected2[i]) == 0);
     }
 
+    printf("parseline test passed\n");
+
     free_cmd_arg(&args);
     return 0;
 }

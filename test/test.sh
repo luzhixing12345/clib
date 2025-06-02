@@ -1,5 +1,6 @@
 #!/bin/bash
 source "common.sh"
+init_test_state
 # 定义要检查的文件夹列表
 folders=("log" "hashtable" "shell" "argparse" "file" "string" "tqdm")  # 替换为实际的文件夹名称
 
@@ -9,10 +10,8 @@ for folder in "${folders[@]}"; do
 
     # 检查是否存在 test.sh
     if [[ -f "test.sh" ]]; then
-        SPLIT
-        echo "start testing $folder..."
-        SPLIT
-        ./test.sh || { ERR "Error: test.sh in $folder failed"; exit 1; }
+        split_text "start testing $folder..."
+        source test.sh
     else
         ERR "Error: test.sh not found in $folder"
         exit 1
@@ -20,9 +19,9 @@ for folder in "${folders[@]}"; do
 
     # 返回上级目录
     cd ..
-    INFO "$folder test completed successfully."
+    split_text "$folder test completed successfully."
     echo
 done
 
-INFO "All tests completed successfully."
-exit 0
+split_text "All tests completed successfully."
+show_test_summary

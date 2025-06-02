@@ -2,5 +2,4 @@
 
 source "../common.sh"
 
-./split_str || { ERR "Error: split_str test failed"; exit 1; }
-INFO "split_str test passed"
+run_and_match "./split_str" "all test passed"

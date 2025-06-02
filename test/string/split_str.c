@@ -36,5 +36,6 @@ int main(int argc, char **argv) {
     
     test1();
     test2();
+    printf("all test passed\n");
     return 0;
 }
