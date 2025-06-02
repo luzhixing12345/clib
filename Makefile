@@ -1,36 +1,9 @@
-ifeq ($(strip $(V)),)
-	ifeq ($(findstring s,$(filter-out --%,$(firstword $(MAKEFLAGS)))),)
-		E = @printf
-	else
-		E = @\#
-	endif
-	Q = @
-else
-	E = @\#
-	Q =
-endif
-export E Q
-
-VERSION 	:= 0
-PATCHLEVEL 	:= 0
-SUBLEVEL 	:= 1
-
-# Translate uname -m into ARCH string
-ARCH ?= $(shell uname -m | sed -e s/i.86/i386/ -e s/ppc.*/powerpc/ \
-	  -e s/armv.*/arm/ -e s/aarch64.*/arm64/ -e s/mips64/mips/ \
-	  -e s/riscv64/riscv/ -e s/riscv32/riscv/)
-
 # ------------------------- #
-#          PROJECT          #
+#          VERSION          #
 # ------------------------- #
-CC          	:= gcc
-TARGET      	:=
-LIBNAME     	:= clib
-SRC_PATH    	:= clib
-SRC_EXT     	:= c
-
-# ------------------------- #
-STATIC_LIB 		:= $(SRC_PATH)/lib$(LIBNAME).a
+VERSION 		:= 0
+PATCHLEVEL 		:= 0
+SUBLEVEL 		:= 1
 
 # default: [all, lib, each]
 # ------------------------- #
@@ -47,16 +20,13 @@ STATIC_LIB 		:= $(SRC_PATH)/lib$(LIBNAME).a
 default: lib
 
 # ------------------------- #
-#          BINARIES         #
+#          PROJECT          #
 # ------------------------- #
-AR          := ar
-LD          := ld
-FIND	    := find
-CSCOPE	    := cscope
-TAGS	    := ctags
-INSTALL     := install
-CHECK       := check
-OBJCOPY		:= objcopy
+CC          	:= gcc
+TARGET      	:= 
+LIBNAME     	:= clib
+SRC_PATH    	:= clib
+SRC_EXT     	:= c
 
 # ------------------------- #
 #          FLAGS            #
@@ -67,10 +37,22 @@ LDFLAGS 		:=
 DEFINES     	:= 
 THIRD_LIB   	:= 
 # ------------------------- #
+CFLAGS += $(INCLUDE_PATH)
 
-ifneq ($(strip $(INCLUDE_PATH)),)
-    CFLAGS += $(foreach dir, $(INCLUDE_PATH), -I$(dir))
-endif
+# ------------------------- #
+STATIC_LIB 		:= $(SRC_PATH)/lib$(LIBNAME).a
+
+# ------------------------- #
+#          BINARIES         #
+# ------------------------- #
+AR          := ar
+LD          := ld
+FIND	    := find
+CSCOPE	    := cscope
+TAGS	    := ctags
+INSTALL     := install
+CHECK       := check
+OBJCOPY		:= objcopy
 
 # ------------------------- #
 #          WARNING          #
@@ -86,18 +68,39 @@ WARNING += -Wnull-dereference
 WARNING += -Wformat=2
 WARNING += -fno-strict-aliasing
 WARNING += -Winit-self
-WARNING += -Wnested-externs
 WARNING += -Wno-system-headers
 WARNING += -Wredundant-decls
 WARNING += -Wsign-compare
 WARNING += -Wundef
 WARNING += -Wvolatile-register-var
 WARNING += -Wno-format-nonliteral
-WARNING += -Wno-pedantic -Wno-discarded-qualifiers
+WARNING += -Wno-pedantic
+# if SRC_EXT is c
+ifeq ($(SRC_EXT),c)
+WARNING += -Wnested-externs
+WARNING += -Wno-discarded-qualifiers
+endif
 CFLAGS	+= $(WARNING)
 
 # ------------------------- #
 
+ifeq ($(strip $(V)),)
+	ifeq ($(findstring s,$(filter-out --%,$(firstword $(MAKEFLAGS)))),)
+		E = @printf
+	else
+		E = @\#
+	endif
+	Q = @
+else
+	E = @\#
+	Q =
+endif
+export E Q
+
+# Translate uname -m into ARCH string
+ARCH ?= $(shell uname -m | sed -e s/i.86/i386/ -e s/ppc.*/powerpc/ \
+	  -e s/armv.*/arm/ -e s/aarch64.*/arm64/ -e s/mips64/mips/ \
+	  -e s/riscv64/riscv/ -e s/riscv32/riscv/)
 
 ifneq ($(THIRD_LIB),)
 CFLAGS 	+= $(shell pkg-config --cflags $(THIRD_LIB))
@@ -167,7 +170,7 @@ each: $(EXECUTABLES)
 
 
 $(OBJS):
-%.o: %.c
+%.o: %.$(SRC_EXT)
 ifeq ($(C),1)
 	$(E) "  CHECK   %s\n" $@
 	$(Q) $(CHECK) -c $(CFLAGS) $(CFLAGS_DYNOPT) $< -o $@

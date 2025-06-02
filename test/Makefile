@@ -1,37 +1,9 @@
-
-ifeq ($(strip $(V)),)
-	ifeq ($(findstring s,$(filter-out --%,$(firstword $(MAKEFLAGS)))),)
-		E = @echo
-	else
-		E = @\#
-	endif
-	Q = @
-else
-	E = @\#
-	Q =
-endif
-export E Q
-
-VERSION 	:= 0
-PATCHLEVEL 	:= 0
-SUBLEVEL 	:= 1
-
-# Translate uname -m into ARCH string
-ARCH ?= $(shell uname -m | sed -e s/i.86/i386/ -e s/ppc.*/powerpc/ \
-	  -e s/armv.*/arm/ -e s/aarch64.*/arm64/ -e s/mips64/mips/ \
-	  -e s/riscv64/riscv/ -e s/riscv32/riscv/)
-
 # ------------------------- #
-#          PROJECT          #
+#          VERSION          #
 # ------------------------- #
-CC          	:= gcc
-TARGET      	:=
-LIBNAME     	:= 
-SRC_PATH    	:= .
-SRC_EXT     	:= c
-
-# ------------------------- #
-STATIC_LIB 		:= $(SRC_PATH)/lib$(LIBNAME).a
+VERSION 		:= 0
+PATCHLEVEL 		:= 0
+SUBLEVEL 		:= 1
 
 # default: [all, lib, each]
 # ------------------------- #
@@ -48,6 +20,29 @@ STATIC_LIB 		:= $(SRC_PATH)/lib$(LIBNAME).a
 default: each
 
 # ------------------------- #
+#          PROJECT          #
+# ------------------------- #
+CC          	:= gcc
+TARGET      	:= 
+LIBNAME     	:= 
+SRC_PATH    	:= .
+SRC_EXT     	:= c
+
+# ------------------------- #
+#          FLAGS            #
+# ------------------------- #
+CFLAGS 			:= -DCONFIG_VERSION=\"$(VERSION).$(PATCHLEVEL).$(SUBLEVEL)\" -g
+INCLUDE_PATH 	:= -I../
+LDFLAGS 		:= -L../clib -lclib
+DEFINES     	:= 
+THIRD_LIB   	:= 
+# ------------------------- #
+CFLAGS += $(INCLUDE_PATH)
+
+# ------------------------- #
+STATIC_LIB 		:= $(SRC_PATH)/lib$(LIBNAME).a
+
+# ------------------------- #
 #          BINARIES         #
 # ------------------------- #
 AR          := ar
@@ -58,21 +53,6 @@ TAGS	    := ctags
 INSTALL     := install
 CHECK       := check
 OBJCOPY		:= objcopy
-
-# ------------------------- #
-#          FLAGS            #
-# ------------------------- #
-CFLAGS 			:= -DCONFIG_VERSION=\"$(VERSION).$(PATCHLEVEL).$(SUBLEVEL)\" -g
-LDFLAGS 		:= 
-LIBS			:= -L../clib -lclib -lpthread
-DEFINES     	:= 
-THIRD_LIB   	:= 
-INCLUDE_PATH 	:= ..
-# ------------------------- #
-
-ifneq ($(strip $(INCLUDE_PATH)),)
-    CFLAGS += $(foreach dir, $(INCLUDE_PATH), -I$(dir))
-endif
 
 # ------------------------- #
 #          WARNING          #
@@ -88,18 +68,39 @@ WARNING += -Wnull-dereference
 WARNING += -Wformat=2
 WARNING += -fno-strict-aliasing
 WARNING += -Winit-self
-WARNING += -Wnested-externs
 WARNING += -Wno-system-headers
 WARNING += -Wredundant-decls
 WARNING += -Wsign-compare
 WARNING += -Wundef
 WARNING += -Wvolatile-register-var
 WARNING += -Wno-format-nonliteral
-WARNING += -Wno-pedantic -Wno-discarded-qualifiers
+WARNING += -Wno-pedantic
+# if SRC_EXT is c
+ifeq ($(SRC_EXT),c)
+WARNING += -Wnested-externs
+WARNING += -Wno-discarded-qualifiers
+endif
 CFLAGS	+= $(WARNING)
 
 # ------------------------- #
 
+ifeq ($(strip $(V)),)
+	ifeq ($(findstring s,$(filter-out --%,$(firstword $(MAKEFLAGS)))),)
+		E = @printf
+	else
+		E = @\#
+	endif
+	Q = @
+else
+	E = @\#
+	Q =
+endif
+export E Q
+
+# Translate uname -m into ARCH string
+ARCH ?= $(shell uname -m | sed -e s/i.86/i386/ -e s/ppc.*/powerpc/ \
+	  -e s/armv.*/arm/ -e s/aarch64.*/arm64/ -e s/mips64/mips/ \
+	  -e s/riscv64/riscv/ -e s/riscv32/riscv/)
 
 ifneq ($(THIRD_LIB),)
 CFLAGS 	+= $(shell pkg-config --cflags $(THIRD_LIB))
@@ -112,6 +113,7 @@ rwildcard = $(foreach d, $(filter-out .., $(wildcard $1*)), \
 ifneq ($(strip $(SRC_PATH)),)
     SRC += $(call rwildcard, $(SRC_PATH), %.$(SRC_EXT))
 endif
+
 OBJS = $(SRC:$(SRC_EXT)=o)
 
 comma = ,
@@ -138,15 +140,15 @@ debug: all
 
 # compile program bin
 $(PROGRAM): $(OBJS) $(OBJS_DYNOPT) $(OTHEROBJS) $(GUEST_OBJS)
-	$(E) -e "  LINK    \033[1;32m" $@ "\033[0m"
-	$(Q) $(CC) $(CFLAGS) $(OBJS) $(OBJS_DYNOPT) $(OTHEROBJS) $(GUEST_OBJS) $(LDFLAGS) $(LIBS) $(LIBS_DYNOPT) $(LIBFDT_STATIC) -o $@
-	$(E) "  binary program $(PROGRAM) is ready."
+	$(E) "  LINK    \033[1;32m%s\033[0m\n" $@
+	$(Q) $(CC) $(CFLAGS) $(OBJS) $(OBJS_DYNOPT) $(OTHEROBJS) $(GUEST_OBJS) $(LDFLAGS) $(LIBS_DYNOPT) $(LIBFDT_STATIC) -o $@
+	$(E) "  binary program $(PROGRAM) is ready.\n"
 
 # compile static lib
 $(STATIC_LIB): $(OBJS) $(OTHEROBJS) $(GUEST_OBJS)
-	$(E) -e "  LINK    \033[1;32m" $@ "\033[0m"
+	$(E) "  LINK    \033[1;32m%s\033[0m\n" $@
 	$(Q) $(AR) rcs $@ $(OBJS) $(OTHEROBJS) $(GUEST_OBJS)
-	$(E) "  static library $(STATIC_LIB) is ready."
+	$(E) "  static library $(STATIC_LIB) is ready.\n"
 
 # compile dynamic lib
 # $(DYNAMIC_LIB): $(OBJS) $(OTHEROBJS) $(GUEST_OBJS)
@@ -159,21 +161,21 @@ lib: $(STATIC_LIB)
 .PHONY: lib
 
 EXECUTABLES = $(OBJS:.o=)
-%: %.o ../clib/libclib.a
-	$(E) -e "  LINK    \033[1;32m" $@ "\033[0m"
-	$(Q) $(CC) $(CFLAGS) $< $(LDFLAGS) $(LIBS) -o $@
+%: %.o
+	$(E) "  LINK    \033[1;32m%s\033[0m\n" $@
+	$(Q) $(CC) $(CFLAGS) $< $(LDFLAGS) -o $@
 
 each: $(EXECUTABLES)
 .PHONY: each
 
 
 $(OBJS):
-%.o: %.c
+%.o: %.$(SRC_EXT)
 ifeq ($(C),1)
-	$(E) "  CHECK   " $@
+	$(E) "  CHECK   %s\n" $@
 	$(Q) $(CHECK) -c $(CFLAGS) $(CFLAGS_DYNOPT) $< -o $@
 endif
-	$(E) "  CC      " $@
+	$(E) "  CC      %s\n" $@
 	$(Q) $(CC) -c $(c_flags) $(CFLAGS_DYNOPT) $< -o $@
 
 # ------------------------- #
@@ -182,37 +184,42 @@ endif
 .PHONY: clean distclean lib release tar all test
 
 install: all
-	$(E) "  INSTALL"
+	$(E) "  INSTALL\n"
 	$(Q) $(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(bindir_SQ)' 
 	$(Q) $(INSTALL) $(PROGRAM) '$(DESTDIR_SQ)$(bindir_SQ)' 
 .PHONY: install
 
 
 clean:
-	$(E) "  CLEAN"
+	$(E) "  CLEAN\n"
 	$(Q) rm -f $(DEPS) $(STATIC_DEPS) $(OBJS) $(OTHEROBJS) $(OBJS_DYNOPT) $(STATIC_OBJS) $(PROGRAM) $(PROGRAM_ALIAS) $(GUEST_INIT) $(GUEST_PRE_INIT) $(GUEST_OBJS)
 	$(Q) rm -f $(PROGRAM) $(EXECUTABLES)
 	$(Q) rm -f $(STATIC_LIB)
 	$(Q) rm -f $(DYNAMIC_LIB)
+release:
+	$(MAKE) -j4
+	mkdir $(RELEASE)
+	@cp $(EXE) $(RELEASE)/ 
+	tar -cvf $(TARGET).tar $(RELEASE)/
+
 # 输出配置信息, 包括 CFLAGS, LDFLAGS, LIBS
 config:
-	$(E) "CONFIG"
-	$(E) "  [SRC FILES]: $(shell echo $(SRC) | tr '\n' ' ')"
-	$(E) "  [CFLAGS]: $(CFLAGS)"
-	$(E) "  [LDFLAGS]: $(LDFLAGS)"
-	$(E) "  [LIBS]: $(LIBS)"
+	$(E) "CONFIG\n"
+	$(E) "  [SRC FILES]: %s\n" "$(shell echo $(SRC) | tr '\n' ' ')"
+	$(E) "  [CFLAGS]: %s\n" "$(CFLAGS)"
+	$(E) "  [LDFLAGS]: %s\n" "$(LDFLAGS)"
 
 help:
-	$(E) ""
-	$(E) "  [$(TARGET) compile help]"
-	$(E) ""
-	$(E) "    make              编译"
-	$(E) "    make help         帮助信息"
-	$(E) "    make clean        清除编译文件"
-	$(E) "    make config       查看配置信息"
-	$(E) "    make install      安装"
-	$(E) "    make debug        调试模式"
-	$(E) ""
+	$(E) "\n"
+	$(E) "  [%s compile help]\n" $(TARGET)
+	$(E) "\n"
+	$(E) "    make              编译\n"
+	$(E) "    make help         帮助信息\n"
+	$(E) "    make clean        清除编译文件\n"
+	$(E) "    make config       查看配置信息\n"
+	$(E) "    make install      安装\n"
+	$(E) "    make debug        调试模式\n"
+	$(E) "\n"
 
 ifneq ($(MAKECMDGOALS),clean)
 -include $(DEPS)

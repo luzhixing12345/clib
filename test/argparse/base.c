@@ -46,7 +46,7 @@ int main(int argc, const char **argv) {
     }
 
     if (arg_ismatch(&parser, "version")) {
-        printf("%s\n", VERSION);
+        printf("%s\n", CONFIG_VERSION);
         free_argparse(&parser);
         return 0;
     }
