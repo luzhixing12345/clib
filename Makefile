@@ -1,7 +1,6 @@
-
 ifeq ($(strip $(V)),)
 	ifeq ($(findstring s,$(filter-out --%,$(firstword $(MAKEFLAGS)))),)
-		E = @echo
+		E = @printf
 	else
 		E = @\#
 	endif
@@ -138,21 +137,21 @@ debug: all
 
 # compile program bin
 $(PROGRAM): $(OBJS) $(OBJS_DYNOPT) $(OTHEROBJS) $(GUEST_OBJS)
-	$(E) -e "  LINK    \033[1;32m" $@ "\033[0m"
+	$(E) "  LINK    \033[1;32m%s\033[0m\n" $@
 	$(Q) $(CC) $(CFLAGS) $(OBJS) $(OBJS_DYNOPT) $(OTHEROBJS) $(GUEST_OBJS) $(LDFLAGS) $(LIBS_DYNOPT) $(LIBFDT_STATIC) -o $@
-	$(E) "  binary program $(PROGRAM) is ready."
+	$(E) "  binary program $(PROGRAM) is ready.\n"
 
 # compile static lib
 $(STATIC_LIB): $(OBJS) $(OTHEROBJS) $(GUEST_OBJS)
-	$(E) -e "  LINK    \033[1;32m" $@ "\033[0m"
+	$(E) "  LINK    \033[1;32m%s\033[0m\n" $@
 	$(Q) $(AR) rcs $@ $(OBJS) $(OTHEROBJS) $(GUEST_OBJS)
-	$(E) "  static library $(STATIC_LIB) is ready."
+	$(E) "  static library $(STATIC_LIB) is ready.\n"
 
 # compile dynamic lib
 # $(DYNAMIC_LIB): $(OBJS) $(OTHEROBJS) $(GUEST_OBJS)
-# 	$(E) -e "  LINK    \033[1;32m" $@ "\033[0m"
+# 	$(E) "  LINK    \033[1;32m%s\033[0m\n" $@
 # 	$(Q) $(LD) -shared $(OBJS) $(OTHEROBJS) $(GUEST_OBJS) -o $@
-# 	$(E) "  dynamic library $(DYNAMIC_LIB) is ready."
+# 	$(E) "  dynamic library $(DYNAMIC_LIB) is ready.\n"
 
 # compile both static and dynamic lib
 lib: $(STATIC_LIB)
@@ -160,7 +159,7 @@ lib: $(STATIC_LIB)
 
 EXECUTABLES = $(OBJS:.o=)
 %: %.o
-	$(E) -e "  LINK    \033[1;32m" $@ "\033[0m"
+	$(E) "  LINK    \033[1;32m%s\033[0m\n" $@
 	$(Q) $(CC) $(CFLAGS) $< $(LDFLAGS) -o $@
 
 each: $(EXECUTABLES)
@@ -170,10 +169,10 @@ each: $(EXECUTABLES)
 $(OBJS):
 %.o: %.c
 ifeq ($(C),1)
-	$(E) "  CHECK   " $@
+	$(E) "  CHECK   %s\n" $@
 	$(Q) $(CHECK) -c $(CFLAGS) $(CFLAGS_DYNOPT) $< -o $@
 endif
-	$(E) "  CC      " $@
+	$(E) "  CC      %s\n" $@
 	$(Q) $(CC) -c $(c_flags) $(CFLAGS_DYNOPT) $< -o $@
 
 # ------------------------- #
@@ -182,14 +181,14 @@ endif
 .PHONY: clean distclean lib release tar all test
 
 install: all
-	$(E) "  INSTALL"
+	$(E) "  INSTALL\n"
 	$(Q) $(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(bindir_SQ)' 
 	$(Q) $(INSTALL) $(PROGRAM) '$(DESTDIR_SQ)$(bindir_SQ)' 
 .PHONY: install
 
 
 clean:
-	$(E) "  CLEAN"
+	$(E) "  CLEAN\n"
 	$(Q) rm -f $(DEPS) $(STATIC_DEPS) $(OBJS) $(OTHEROBJS) $(OBJS_DYNOPT) $(STATIC_OBJS) $(PROGRAM) $(PROGRAM_ALIAS) $(GUEST_INIT) $(GUEST_PRE_INIT) $(GUEST_OBJS)
 	$(Q) rm -f $(PROGRAM) $(EXECUTABLES)
 	$(Q) rm -f $(STATIC_LIB)
@@ -202,22 +201,22 @@ release:
 
 # 输出配置信息, 包括 CFLAGS, LDFLAGS, LIBS
 config:
-	$(E) "CONFIG"
-	$(E) "  [SRC FILES]: $(shell echo $(SRC) | tr '\n' ' ')"
-	$(E) "  [CFLAGS]: $(CFLAGS)"
-	$(E) "  [LDFLAGS]: $(LDFLAGS)"
+	$(E) "CONFIG\n"
+	$(E) "  [SRC FILES]: %s\n" "$(shell echo $(SRC) | tr '\n' ' ')"
+	$(E) "  [CFLAGS]: %s\n" "$(CFLAGS)"
+	$(E) "  [LDFLAGS]: %s\n" "$(LDFLAGS)"
 
 help:
-	$(E) ""
-	$(E) "  [$(TARGET) compile help]"
-	$(E) ""
-	$(E) "    make              编译"
-	$(E) "    make help         帮助信息"
-	$(E) "    make clean        清除编译文件"
-	$(E) "    make config       查看配置信息"
-	$(E) "    make install      安装"
-	$(E) "    make debug        调试模式"
-	$(E) ""
+	$(E) "\n"
+	$(E) "  [%s compile help]\n" $(TARGET)
+	$(E) "\n"
+	$(E) "    make              编译\n"
+	$(E) "    make help         帮助信息\n"
+	$(E) "    make clean        清除编译文件\n"
+	$(E) "    make config       查看配置信息\n"
+	$(E) "    make install      安装\n"
+	$(E) "    make debug        调试模式\n"
+	$(E) "\n"
 
 ifneq ($(MAKECMDGOALS),clean)
 -include $(DEPS)
