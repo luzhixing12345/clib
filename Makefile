@@ -127,7 +127,7 @@ CFLAGS  += $(DEFINES)
 c_flags	= -Wp,-MD,$(depfile) -Wp,-MT,$@ $(CFLAGS)
 
 ifeq ($(MAKECMDGOALS),debug)
-CFLAGS+=-g
+CFLAGS += -g
 endif
 
 PROGRAM = $(TARGET)
@@ -135,7 +135,7 @@ PROGRAM = $(TARGET)
 all: $(PROGRAM)
 .PHONY: all
 
-debug: all
+debug: default
 .PHONY: debug
 
 # compile program bin

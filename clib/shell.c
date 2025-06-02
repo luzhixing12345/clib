@@ -75,9 +75,9 @@ static void try_autocomplete(struct shell *shell) {
     }
 }
 
-static KeyBind handle_control_serial(struct keybind_t *keybind, void *data) {
+static Key_t handle_control_serial(struct keybind_t *keybind, void *data) {
     char c;
-    struct shell *shell = data;
+    struct shell *shell = (struct shell *)data;
     read(STDIN_FILENO, &c, 1);
     ASSERT(c == '[');
     read(STDIN_FILENO, &c, 1);
@@ -89,9 +89,9 @@ static KeyBind handle_control_serial(struct keybind_t *keybind, void *data) {
     ASSERT(0);
 }
 
-static KeyBind handle_cursor_left(struct keybind_t *keybind, void *data) {
+static Key_t handle_cursor_left(struct keybind_t *keybind, void *data) {
     // DEBUG("called cursor_left\n");
-    struct shell *shell = data;
+    struct shell *shell = (struct shell *)data;
     if (shell->cursor_idx > 0) {
         shell->cursor_idx--;
         CURSOR_LEFT(1);
@@ -99,9 +99,9 @@ static KeyBind handle_cursor_left(struct keybind_t *keybind, void *data) {
     return keybind->key;
 }
 
-static KeyBind handle_cursor_right(struct keybind_t *keybind, void *data) {
+static Key_t handle_cursor_right(struct keybind_t *keybind, void *data) {
     // DEBUG("called cursor_right\n");
-    struct shell *shell = data;
+    struct shell *shell = (struct shell *)data;
     if (shell->cursor_idx < shell->cmd_idx) {
         shell->cursor_idx++;
         CURSOR_RIGHT(1);
@@ -109,8 +109,8 @@ static KeyBind handle_cursor_right(struct keybind_t *keybind, void *data) {
     return keybind->key;
 }
 
-static KeyBind handle_cursor_up(struct keybind_t *keybind, void *data) {
-    struct shell *shell = data;
+static Key_t handle_cursor_up(struct keybind_t *keybind, void *data) {
+    struct shell *shell = (struct shell *)data;
     shell->history_idx = (shell->history_idx - 1 + shell->history_len) % shell->history_len;
     char *line = shell->history_buf[shell->history_idx];
     // copy line to cmd_buf
@@ -124,8 +124,8 @@ static KeyBind handle_cursor_up(struct keybind_t *keybind, void *data) {
     return keybind->key;
 }
 
-static KeyBind handle_cursor_down(struct keybind_t *keybind, void *data) {
-    struct shell *shell = data;
+static Key_t handle_cursor_down(struct keybind_t *keybind, void *data) {
+    struct shell *shell = (struct shell *)data;
     shell->history_idx = (shell->history_idx + 1) % shell->history_len;
     char *line = shell->history_buf[shell->history_idx];
     // copy line to cmd_buf
@@ -139,8 +139,8 @@ static KeyBind handle_cursor_down(struct keybind_t *keybind, void *data) {
     return keybind->key;
 }
 
-static KeyBind handle_cursor_home(struct keybind_t *keybind, void *data) {
-    struct shell *shell = data;
+static Key_t handle_cursor_home(struct keybind_t *keybind, void *data) {
+    struct shell *shell = (struct shell *)data;
     if (shell->cmd_idx == 0)
         return keybind->key;
 
@@ -149,8 +149,8 @@ static KeyBind handle_cursor_home(struct keybind_t *keybind, void *data) {
     return keybind->key;
 }
 
-static KeyBind handle_cursor_end(struct keybind_t *keybind, void *data) {
-    struct shell *shell = data;
+static Key_t handle_cursor_end(struct keybind_t *keybind, void *data) {
+    struct shell *shell = (struct shell *)data;
     if (shell->cursor_idx == shell->cmd_idx)
         return keybind->key;
     CURSOR_RIGHT(shell->cmd_idx - shell->cursor_idx);
@@ -158,15 +158,15 @@ static KeyBind handle_cursor_end(struct keybind_t *keybind, void *data) {
     return keybind->key;
 }
 
-static KeyBind handle_exit_shell(struct keybind_t *keybind, void *data) {
-    struct shell *shell = data;
+static Key_t handle_exit_shell(struct keybind_t *keybind, void *data) {
+    struct shell *shell = (struct shell *)data;
     shell->args.argc = 0;
     printf("\n");
     return keybind->key;
 }
 
-static KeyBind handle_clear_cmdline_before_cursor(struct keybind_t *keybind, void *data) {
-    struct shell *shell = data;
+static Key_t handle_clear_cmdline_before_cursor(struct keybind_t *keybind, void *data) {
+    struct shell *shell = (struct shell *)data;
     // 将当前光标位置及之后的字符前移到开头
     for (int i = 0; i < shell->cmd_idx - shell->cursor_idx; i++) {
         shell->cmd_buf[i] = shell->cmd_buf[i + shell->cursor_idx];
@@ -183,8 +183,8 @@ static KeyBind handle_clear_cmdline_before_cursor(struct keybind_t *keybind, voi
     return keybind->key;
 }
 
-static KeyBind handle_clear_cmdline_after_cursor(struct keybind_t *keybind, void *data) {
-    struct shell *shell = data;
+static Key_t handle_clear_cmdline_after_cursor(struct keybind_t *keybind, void *data) {
+    struct shell *shell = (struct shell *)data;
     if (shell->cursor_idx == shell->cmd_idx)
         return keybind->key;
 
@@ -210,10 +210,10 @@ static KeyBind handle_clear_cmdline_after_cursor(struct keybind_t *keybind, void
 
 // }
 
-static KeyBind handle_clear_screen(struct keybind_t *keybind, void *data) {
+static Key_t handle_clear_screen(struct keybind_t *keybind, void *data) {
     CLEAR_SCREEN();
     CURSOR_RESET();
-    struct shell *shell = data;
+    struct shell *shell = (struct shell *)data;
     printf("%s", shell->prompt);
     fflush(stdout);
     if (shell->cmd_idx > 0) {
@@ -226,8 +226,8 @@ static KeyBind handle_clear_screen(struct keybind_t *keybind, void *data) {
     return keybind->key;
 }
 
-static KeyBind handle_tabcomplete(struct keybind_t *keybind, void *data) {
-    struct shell *shell = data;
+static Key_t handle_tabcomplete(struct keybind_t *keybind, void *data) {
+    struct shell *shell = (struct shell *)data;
     if (shell->history_p && shell->cmd_idx == shell->cursor_idx) {
         strncpy(shell->cmd_buf + shell->cmd_idx, shell->history_p, (int)strlen(shell->history_p));
         shell->cmd_idx += (int)strlen(shell->history_p);
@@ -238,8 +238,8 @@ static KeyBind handle_tabcomplete(struct keybind_t *keybind, void *data) {
     return keybind->key;
 }
 
-static KeyBind handle_enter(struct keybind_t *keybind, void *data) {
-    struct shell *shell = data;
+static Key_t handle_enter(struct keybind_t *keybind, void *data) {
+    struct shell *shell = (struct shell *)data;
     shell->cmd_buf[shell->cmd_idx] = '\0';
     parseline(shell->cmd_buf, &shell->args);
     add_history(shell, shell->cmd_buf);
@@ -258,8 +258,8 @@ static KeyBind handle_enter(struct keybind_t *keybind, void *data) {
     return keybind->key;
 }
 
-static KeyBind handle_backspace(struct keybind_t *keybind, void *data) {
-    struct shell *shell = data;
+static Key_t handle_backspace(struct keybind_t *keybind, void *data) {
+    struct shell *shell = (struct shell *)data;
     if (shell->cursor_idx == 0)
         return keybind->key;
     if (shell->cursor_idx == shell->cmd_idx) {
@@ -297,7 +297,7 @@ int shell_run(struct shell *shell) {
         int flag = 0;
         for (int i = 0; i < shell->keybinds_len; i++) {
             if (c == (char)shell->keybinds[i].key) {
-                KeyBind key = shell->keybinds[i].func(&keybinds[i], shell);
+                Key_t key = shell->keybinds[i].func(&keybinds[i], shell);
                 // return 1 if should call user to handle next or exit shell
                 if (key == KEY_ENTER || key == KEY_ESC || key == shell->keybinds[K_EOF].key) {
                     return 1;
@@ -332,7 +332,7 @@ int shell_run(struct shell *shell) {
 }
 
 static void init_keybind(struct shell *shell) {
-    keybinds[K_CTL_SERIAL].key = '\033';
+    keybinds[K_CTL_SERIAL].key = KEY_ESC;
     keybinds[K_CTL_SERIAL].func = handle_control_serial;
 
     keybinds[K_UP].key = KEY_UP;
@@ -360,13 +360,13 @@ static void init_keybind(struct shell *shell) {
 
     struct termios current_termios;
     tcgetattr(STDIN_FILENO, &current_termios);
-    keybinds[K_EOF].key = current_termios.c_cc[VEOF];
+    keybinds[K_EOF].key = (Key_t)current_termios.c_cc[VEOF];
     keybinds[K_EOF].func = handle_exit_shell;
 
-    keybinds[K_ERASE].key = current_termios.c_cc[VERASE];
+    keybinds[K_ERASE].key = (Key_t)current_termios.c_cc[VERASE];
     keybinds[K_ERASE].func = handle_backspace;
 
-    keybinds[K_KILL].key = current_termios.c_cc[VKILL];
+    keybinds[K_KILL].key = (Key_t)current_termios.c_cc[VKILL];
     keybinds[K_KILL].func = handle_clear_cmdline_before_cursor;
 
     keybinds[K_CLEAR_SCREEN].key = KEY_CLEAR_SCREEN;
@@ -380,7 +380,7 @@ static void init_keybind(struct shell *shell) {
 }
 
 struct shell *create_shell(char *prompt) {
-    struct shell *shell = malloc(sizeof(struct shell));
+    struct shell *shell = (struct shell *)malloc(sizeof(struct shell));
     memset(shell, 0, sizeof(struct shell));
     shell->prompt = prompt;
 
@@ -442,7 +442,7 @@ int parseline(const char *cmdbuf, struct cmd_arg *args) {
     }
 
     // 动态分配 argv 数组
-    args->argv = malloc(sizeof(char *) * (strlen(buf) / 2 + 1));  // 最多 cmdbuf_len/2 个参数
+    args->argv = (char **)malloc(sizeof(char *) * (strlen(buf) / 2 + 1));  // 最多 cmdbuf_len/2 个参数
     if (!args->argv) {
         free(buf);
         return -1;  // 内存分配失败

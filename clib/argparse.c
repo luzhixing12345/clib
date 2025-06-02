@@ -741,7 +741,7 @@ void argparse_parse(argparse *parser, int argc, const char **argv) {
                 if (option->value) {
                     free(option->value);
                 }
-                if (!strcmp(option->long_name, "--") && parser->flag & ARGPARSE_ENABLE_CMD) {
+                if ((parser->flag & ARGPARSE_ENABLE_CMD) && option->long_name && !strcmp(option->long_name, "--")) {
                     // 如果匹配到 -- 那么停止解析, 把后面所有的参数都赋给 option->value
                     int total_len = 0;
                     for (int j = i + 1; j < argc; j++) {

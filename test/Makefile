@@ -135,7 +135,7 @@ PROGRAM = $(TARGET)
 all: $(PROGRAM)
 .PHONY: all
 
-debug: all
+debug: default
 .PHONY: debug
 
 # compile program bin

@@ -1,20 +1,37 @@
 
 #pragma once
 
-#define KEY_ENTER        '\n'  // 0x0A
-#define KEY_CR           '\r'
-#define KEY_BACKSPACE    127
-#define KEY_ESC          '\033'
-#define KEY_SPACE        ' '
-#define KEY_TAB          '\t'
-#define KEY_UP           0x41
-#define KEY_DOWN         0x42
-#define KEY_RIGHT        0x43
-#define KEY_LEFT         0x44
-#define KEY_HOME         'H'
-#define KEY_END          'F'
-#define KEY_CLEAR_SCREEN 0x0C
-#define KEY_CLEAR_AFTER  0x0B
+// #define KEY_ENTER        '\n'  // 0x0A
+// #define KEY_CR           '\r'
+// #define KEY_BACKSPACE    127
+// #define KEY_ESC          '\033'
+// #define KEY_SPACE        ' '
+// #define KEY_TAB          '\t'
+// #define KEY_UP           0x41
+// #define KEY_DOWN         0x42
+// #define KEY_RIGHT        0x43
+// #define KEY_LEFT         0x44
+// #define KEY_HOME         'H'
+// #define KEY_END          'F'
+// #define KEY_CLEAR_SCREEN 0x0C
+// #define KEY_CLEAR_AFTER  0x0B
+
+typedef enum {
+    KEY_ENTER = '\n',
+    KEY_CR = '\r',
+    KEY_BACKSPACE = 127,
+    KEY_ESC = '\033',
+    KEY_SPACE = ' ',
+    KEY_TAB = '\t',
+    KEY_UP = 0x41,
+    KEY_DOWN = 0x42,
+    KEY_RIGHT = 0x43,
+    KEY_LEFT = 0x44,
+    KEY_HOME = 'H',
+    KEY_END = 'F',
+    KEY_CLEAR_SCREEN = 0x0C,
+    KEY_CLEAR_AFTER = 0x0B
+} Key_t;
 
 typedef enum {
     K_CTL_SERIAL,
@@ -35,8 +52,8 @@ typedef enum {
 } KeyBind;
 
 struct keybind_t {
-    KeyBind key;
-    KeyBind (*func)(struct keybind_t *keybind, void *data);
+    Key_t key;
+    Key_t (*func)(struct keybind_t *keybind, void *data);
 };
 
 char *keytostr(int key);
