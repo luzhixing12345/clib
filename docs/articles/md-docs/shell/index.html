@@ -35,10 +35,64 @@
 </span><span class="Token CompoundStatement IterationStatement LF">
 </span><span class="Token CompoundStatement IterationStatement SPACE">    </span><span class="Token Identifier PrimaryExpression FunctionCall ID">free_shell</span><span class="Token PostfixExpression UnaryExpression BraceDepth-1 LPAREN">(</span><span class="Token Identifier PrimaryExpression ID">shell</span><span class="Token PostfixExpression UnaryExpression BraceDepth-1 RPAREN">)</span><span class="Token ExpressionStatement SEMI">;</span><span class="Token ExpressionStatement LF">
 </span><span class="Token ExpressionStatement SPACE">    </span><span class="Token Keyword JumpStatement RETURN">return</span><span class="Token Keyword JumpStatement SPACE"> </span><span class="Token Constant PrimaryExpression NUMBER">0</span><span class="Token JumpStatement SEMI">;</span><span class="Token JumpStatement LF">
-</span><span class="Token CompoundStatement Function BraceDepth-0 RCURLY_BRACE">}</span></code></pre><p><a data-lightbox="example-1" href="https://raw.githubusercontent.com/learner-lu/picbed/master/shell.gif"><img loading="lazy" src="https://raw.githubusercontent.com/learner-lu/picbed/master/shell.gif" alt="shell"></a></p><p>支持</p><ul><li>历史命令提示, <kbd>tab</kbd> 自动补全</li></ul><ul><li>上下历史记录回顾, 左右箭头移动, <kbd>backspace</kbd> 退格, <kbd>home</kbd> <kbd>end</kbd></li></ul><ul><li><kbd>ctrl</kbd> + <kbd>u</kbd> 清空光标之前, <kbd>ctrl</kbd> + <kbd>k</kbd> 清空光标之后</li></ul><ul><li><kbd>ctrl</kbd> + <kbd>l</kbd> 清屏</li></ul><p>主循环中会在每一次 <kbd>enter</kbd> 之后返回, 其 event 对象包含两个属性 argc 和 argv 为当前命令解析结果</p><blockquote style="border-left-color: #0969da; background-color: #e8f3ff;"><p><div style="color: #0969da;"><img class="icon-note" loading="lazy" src="../../../img/note.svg" alt="[!NOTE]"> NOTE </div> 推荐使用本项目中的 <a href="../../md-docs/参数解析" target="_self">argparse</a> 模块进行后续的参数解析哦</p></blockquote></div>
+</span><span class="Token CompoundStatement Function BraceDepth-0 RCURLY_BRACE">}</span></code></pre><p><a data-lightbox="example-1" href="https://raw.githubusercontent.com/learner-lu/picbed/master/shell.gif"><img loading="lazy" src="https://raw.githubusercontent.com/learner-lu/picbed/master/shell.gif" alt="shell"></a></p><p>支持</p><ul><li>历史命令提示, <kbd>tab</kbd> 自动补全</li></ul><ul><li>上下历史记录回顾, 左右箭头移动, <kbd>backspace</kbd> 退格, <kbd>home</kbd> <kbd>end</kbd></li></ul><ul><li><kbd>ctrl</kbd> + <kbd>u</kbd> 清空光标之前, <kbd>ctrl</kbd> + <kbd>k</kbd> 清空光标之后</li></ul><ul><li><kbd>ctrl</kbd> + <kbd>l</kbd> 清屏</li></ul><p>主循环中会在每一次 <kbd>enter</kbd> 之后返回, 其 event 对象包含两个属性 argc 和 argv 为当前命令解析结果</p><blockquote style="border-left-color: #0969da; background-color: #e8f3ff;"><div style="color: #0969da;"><img class="icon-note" loading="lazy" src="../../../img/note.svg" alt="[!NOTE]"> NOTE </div><p> 推荐使用本项目中的 <a href="../../md-docs/参数解析" target="_self">argparse</a> 模块进行后续的参数解析哦</p></blockquote></div>
+                <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    var markdownBody = document.querySelector('.markdown-body');
+                    var giscusDiv = markdownBody.querySelector('.giscus');
+                    var referenceHtml = `<div class="references-tabs-container">
+<div class="references-tabs-nav">
+<button class="references-tab-btn active" data-tab="references-out">本文引用</button>
+</div>
+<div class="references-tabs-content">
+<div class="references-tab-pane active" id="references-out">
+<ul class="reference-list">
+<li><a href="../../md-docs/参数解析">📄 参数解析</a></li>
+</ul>
+</div>
+</div>
+</div>`;
+                    
+                    if (giscusDiv) {
+                        giscusDiv.insertAdjacentHTML('beforebegin', referenceHtml);
+                    } else {
+                        markdownBody.insertAdjacentHTML('beforeend', referenceHtml);
+                    }
+                    
+                    // 添加选项卡切换功能
+                    setTimeout(function() {
+                        var tabButtons = document.querySelectorAll('.references-tab-btn');
+                        var tabPanes = document.querySelectorAll('.references-tab-pane');
+                        
+                        tabButtons.forEach(function(button) {
+                            button.addEventListener('click', function() {
+                                var targetTab = this.getAttribute('data-tab');
+                                
+                                // 移除所有active类
+                                tabButtons.forEach(btn => btn.classList.remove('active'));
+                                tabPanes.forEach(pane => pane.classList.remove('active'));
+                                
+                                // 添加active类到当前选中的选项卡
+                                this.classList.add('active');
+                                var targetPane = document.getElementById(targetTab);
+                                if (targetPane) {
+                                    targetPane.classList.add('active');
+                                }
+                            });
+                        });
+                    }, 100);
+                });
+                </script>
+                
     <div class="dir-tree"><ul><li><a href="../../md-docs/README" >README</a></li></ul><ul><li><a href="../../md-docs/编译安装" >编译安装</a></li></ul><ul><li><a href="../../md-docs/日志" >日志</a></li></ul><ul><li><a href="../../md-docs/参数解析" >参数解析</a></li></ul><ul><li><a href="../../md-docs/hashtable" >hashtable</a></li></ul><ul><li><a href="../../md-docs/终端彩色输出" >终端彩色输出</a></li></ul><ul><li><a href="../../md-docs/进度条" >进度条</a></li></ul><ul><li><a href="../../md-docs/shell" >shell</a></li></ul><ul><li><a href="../../工具库/unicode" >工具库</a><ul><li><a href="../../工具库/unicode" >unicode</a></li></ul></li></ul><ul><li><a href="../../libc/LD_PRELOAD" >libc</a><ul><li><a href="../../libc/LD_PRELOAD" >LD_PRELOAD</a></li></ul></li></ul><ul><li><a href="../../others/glib" >others</a><ul><li><a href="../../others/glib" >glib</a></li></ul><ul><li><a href="../../others/cjson" >cjson</a></li></ul></li></ul></div>
     <div class="zood"><a class="" href="https://github.com/luzhixing12345/zood" target="_blank">zood</a></div>
-    <script type="text/javascript" src="../../../js/next_front.js"></script><script>addLink("../../md-docs/进度条","../../工具库/unicode","ab");</script><script type="text/javascript" src="../../../js/change_mode.js"></script><script>addChangeModeButton("../../../img/sun.png","../../../img/moon.png");</script><script type="text/javascript" src="../../../js/copy_code.js"></script><script>addCodeCopy("../../../img/before_copy.png","../../../img/after_copy.png");</script><script type="text/javascript" src="../../../js/navigator.js"></script><script type="text/javascript" src="../../../js/picture_preview.js"></script><script type="text/javascript" src="../../../js/global_js_configuration.js"></script>
+    <script type="text/javascript" src="../../../js/next_front.js"></script><script>addLink("../../md-docs/进度条","../../工具库/unicode","ab");</script><script type="text/javascript" src="../../../js/change_mode.js"></script><script>addChangeModeButton("../../../img/sun.png","../../../img/moon.png");</script><script type="text/javascript" src="../../../js/copy_code.js"></script><script>addCodeCopy("../../../img/clipboard.svg","../../../img/clipboard-check.svg");</script><script type="text/javascript" src="../../../js/navigator.js"></script><script type="text/javascript" src="../../../js/picture_preview.js"></script><script type="text/javascript" src="../../../js/dir_tree_toggle.js"></script><script type="text/javascript" src="../../../js/global_js_configuration.js"></script>
 </body>
+<script>
+    const ws = new WebSocket("ws://127.0.0.1:8765");
+    ws.onmessage = (event) => {
+        if (event.data === "reload") location.reload();
+    };
+</script>
 
 </html>

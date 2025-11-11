@@ -612,7 +612,7 @@ static void value_pass(argparse *parser, argparse_option *option) {
  * @param argc
  * @param argv
  */
-void argparse_parse(argparse *parser, int argc, const char **argv) {
+void argparse_parse(argparse *parser, int argc, char **argv) {
     // 不使用 i 作为匹配位置的索引, 因为需要考虑粘连参数的先后顺序 -abc
     int match_pos = 1;
     for (int i = 1; i < argc; i++) {

@@ -18,7 +18,13 @@
     <div class="header-navigator"><ul><li><a href="#h1-0">终端彩色输出</a></li></ul></div><div class='markdown-body'><h1 id="h1-0">终端彩色输出</h1></div>
     <div class="dir-tree"><ul><li><a href="../../md-docs/README" >README</a></li></ul><ul><li><a href="../../md-docs/编译安装" >编译安装</a></li></ul><ul><li><a href="../../md-docs/日志" >日志</a></li></ul><ul><li><a href="../../md-docs/参数解析" >参数解析</a></li></ul><ul><li><a href="../../md-docs/hashtable" >hashtable</a></li></ul><ul><li><a href="../../md-docs/终端彩色输出" >终端彩色输出</a></li></ul><ul><li><a href="../../md-docs/进度条" >进度条</a></li></ul><ul><li><a href="../../md-docs/shell" >shell</a></li></ul><ul><li><a href="../../工具库/unicode" >工具库</a><ul><li><a href="../../工具库/unicode" >unicode</a></li></ul></li></ul><ul><li><a href="../../libc/LD_PRELOAD" >libc</a><ul><li><a href="../../libc/LD_PRELOAD" >LD_PRELOAD</a></li></ul></li></ul><ul><li><a href="../../others/glib" >others</a><ul><li><a href="../../others/glib" >glib</a></li></ul><ul><li><a href="../../others/cjson" >cjson</a></li></ul></li></ul></div>
     <div class="zood"><a class="" href="https://github.com/luzhixing12345/zood" target="_blank">zood</a></div>
-    <script type="text/javascript" src="../../../js/next_front.js"></script><script>addLink("../../md-docs/hashtable","../../md-docs/进度条","ab");</script><script type="text/javascript" src="../../../js/change_mode.js"></script><script>addChangeModeButton("../../../img/sun.png","../../../img/moon.png");</script><script type="text/javascript" src="../../../js/copy_code.js"></script><script>addCodeCopy("../../../img/before_copy.png","../../../img/after_copy.png");</script><script type="text/javascript" src="../../../js/navigator.js"></script><script type="text/javascript" src="../../../js/picture_preview.js"></script><script type="text/javascript" src="../../../js/global_js_configuration.js"></script>
+    <script type="text/javascript" src="../../../js/next_front.js"></script><script>addLink("../../md-docs/hashtable","../../md-docs/进度条","ab");</script><script type="text/javascript" src="../../../js/change_mode.js"></script><script>addChangeModeButton("../../../img/sun.png","../../../img/moon.png");</script><script type="text/javascript" src="../../../js/copy_code.js"></script><script>addCodeCopy("../../../img/clipboard.svg","../../../img/clipboard-check.svg");</script><script type="text/javascript" src="../../../js/navigator.js"></script><script type="text/javascript" src="../../../js/picture_preview.js"></script><script type="text/javascript" src="../../../js/dir_tree_toggle.js"></script><script type="text/javascript" src="../../../js/global_js_configuration.js"></script>
 </body>
+<script>
+    const ws = new WebSocket("ws://127.0.0.1:8765");
+    ws.onmessage = (event) => {
+        if (event.data === "reload") location.reload();
+    };
+</script>
 
 </html>

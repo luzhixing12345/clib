@@ -109,22 +109,31 @@ typedef struct {
 
 // built-in option macros
 
+// --help
 #define ARG_BOOLEAN(bind, short_name, long_name, help_info, append_info, name) \
     { __ARGPARSE_OPT_BOOLEAN, bind, short_name, long_name, help_info, append_info, name }
+// -i 10
 #define ARG_INT(bind, short_name, long_name, help_info, append_info, name) \
     { __ARGPARSE_OPT_INT, bind, short_name, long_name, help_info, append_info, name }
+// -s "text"
 #define ARG_STR(bind, short_name, long_name, help_info, append_info, name) \
     { __ARGPARSE_OPT_STR, bind, short_name, long_name, help_info, append_info, name }
+// -i 10 20 30
 #define ARG_INTS(bind, short_name, long_name, help_info, append_info, name) \
     { __ARGPARSE_OPT_INTS, bind, short_name, long_name, help_info, append_info, name }
+// -s "text1" "text2" "text3"
 #define ARG_STRS(bind, short_name, long_name, help_info, append_info, name) \
     { __ARGPARSE_OPT_STRS, bind, short_name, long_name, help_info, append_info, name }
+// ./main 10
 #define ARG_INT_GROUP(bind, short_name, long_name, help_info, append_info, name) \
     { __ARGPARSE_OPT_INT_GROUP, bind, short_name, long_name, help_info, append_info, name }
+// ./main 10 20 30
 #define ARG_INTS_GROUP(bind, short_name, long_name, help_info, append_info, name) \
     { __ARGPARSE_OPT_INTS_GROUP, bind, short_name, long_name, help_info, append_info, name }
+// ./main "text"
 #define ARG_STR_GROUP(bind, short_name, long_name, help_info, append_info, name) \
     { __ARGPARSE_OPT_STR_GROUP, bind, short_name, long_name, help_info, append_info, name }
+// ./main "text1" "text2" "text3"
 #define ARG_STRS_GROUP(bind, short_name, long_name, help_info, append_info, name) \
     { __ARGPARSE_OPT_STRS_GROUP, bind, short_name, long_name, help_info, append_info, name }
 #define ARG_END() \
@@ -163,7 +172,7 @@ void argparse_info(argparse *parser);
  * @param argc
  * @param argv
  */
-void argparse_parse(argparse *parser, int argc, const char **argv);
+void argparse_parse(argparse *parser, int argc, char **argv);
 
 /**
  * @brief 参数是否匹配

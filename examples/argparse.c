@@ -1,6 +1,6 @@
 #include <clib/clib.h>
 
-int main(int argc, const char **argv) {
+int main(int argc, char **argv) {
     int integer;
     char *str, *dest;
     int src;

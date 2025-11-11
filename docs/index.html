@@ -18,7 +18,13 @@
     <div class="header-navigator"><ul><li><a href="#h1-0">libc</a></li></ul></div><div class='markdown-body'><h1 id="h1-0">libc</h1><p>clib 是一个小型的 C 工具库, 用精简的方式实现了一些 C 标准库没有提供但是日常开发中常见的功能需求, 包括</p><ul><li>日志(线程安全)</li></ul><ul><li>命令行参数解析</li></ul><ul><li>hashtable</li></ul><ul><li>目录, 文件相关的处理(判断文件存在, 递归删除目录...)</li></ul><ul><li>终端彩色打印</li></ul></div>
     <div class="dir-tree"><ul><li><a href="./articles/md-docs/README" >README</a></li></ul><ul><li><a href="./articles/md-docs/编译安装" >编译安装</a></li></ul><ul><li><a href="./articles/md-docs/日志" >日志</a></li></ul><ul><li><a href="./articles/md-docs/参数解析" >参数解析</a></li></ul><ul><li><a href="./articles/md-docs/hashtable" >hashtable</a></li></ul><ul><li><a href="./articles/md-docs/终端彩色输出" >终端彩色输出</a></li></ul><ul><li><a href="./articles/md-docs/进度条" >进度条</a></li></ul><ul><li><a href="./articles/md-docs/shell" >shell</a></li></ul><ul><li><a href="./articles/工具库/unicode" >工具库</a><ul><li><a href="./articles/工具库/unicode" >unicode</a></li></ul></li></ul><ul><li><a href="./articles/libc/LD_PRELOAD" >libc</a><ul><li><a href="./articles/libc/LD_PRELOAD" >LD_PRELOAD</a></li></ul></li></ul><ul><li><a href="./articles/others/glib" >others</a><ul><li><a href="./articles/others/glib" >glib</a></li></ul><ul><li><a href="./articles/others/cjson" >cjson</a></li></ul></li></ul></div>
     <div class="zood"><a class="" href="https://github.com/luzhixing12345/zood" target="_blank">zood</a></div>
-    <script type="text/javascript" src="./js/next_front.js"></script><script>addLink(".","./articles/md-docs/编译安装","ab");</script><script type="text/javascript" src="./js/change_mode.js"></script><script>addChangeModeButton("./img/sun.png","./img/moon.png");</script><script type="text/javascript" src="./js/copy_code.js"></script><script>addCodeCopy("./img/before_copy.png","./img/after_copy.png");</script><script type="text/javascript" src="./js/navigator.js"></script><script type="text/javascript" src="./js/picture_preview.js"></script><script type="text/javascript" src="./js/global_js_configuration.js"></script>
+    <script type="text/javascript" src="./js/next_front.js"></script><script>addLink(".","./articles/md-docs/编译安装","ab");</script><script type="text/javascript" src="./js/change_mode.js"></script><script>addChangeModeButton("./img/sun.png","./img/moon.png");</script><script type="text/javascript" src="./js/copy_code.js"></script><script>addCodeCopy("./img/clipboard.svg","./img/clipboard-check.svg");</script><script type="text/javascript" src="./js/navigator.js"></script><script type="text/javascript" src="./js/picture_preview.js"></script><script type="text/javascript" src="./js/dir_tree_toggle.js"></script><script type="text/javascript" src="./js/global_js_configuration.js"></script>
 </body>
+<script>
+    const ws = new WebSocket("ws://127.0.0.1:8765");
+    ws.onmessage = (event) => {
+        if (event.data === "reload") location.reload();
+    };
+</script>
 
 </html>
