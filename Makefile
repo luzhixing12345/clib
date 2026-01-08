@@ -246,7 +246,7 @@ clean:
 	$(E) "  CLEAN\n"
 	$(Q) rm -f $(DEPS) $(OBJS)
 	$(Q) rm -f $(EXECUTABLES)
-	$(Q) [ -f $(PROGRAM) ] && $(Q) rm -f $(PROGRAM) || true
+	$(Q) [ -f $(PROGRAM) ] && rm -f $(PROGRAM) || true
 	$(Q) rm -f $(LIBFDT_STATIC)
 	$(Q) rm -f $(LIBFDT_DYNAMIC)
 	$(Q) rm -f $(MULTI_EXE_TARGETS) $(MULTI_EXE_OBJS)

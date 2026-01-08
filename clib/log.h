@@ -4,8 +4,6 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#include "utils.h"
-
 #define LOG_ERR     0
 #define LOG_WARNING 1
 #define LOG_INFO    2

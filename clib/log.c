@@ -10,8 +10,9 @@
 #include <pthread.h>
 #include <stdarg.h>
 #include <stdio.h>
+#include <unistd.h>
 
-#include "clib.h"
+#include "log.h"
 
 static int loglevel = DEFAULT_LOG_LEVEL;
 static FILE *logfile = NULL;
