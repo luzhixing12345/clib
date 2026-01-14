@@ -30,16 +30,15 @@ default: lib
 CC          	:= gcc
 SRC_PATH    	:= clib
 SRC_EXT     	:= c
-TARGET      	:= clib
+BUILD_PATH 		:= ./build
 EXCLUDE_SRC 	:= # src/func.c
+TARGET      	:= clib
 
 # ------------------------- #
 #            LIB            #
 # ------------------------- #
 # lib: compile all the files under SRC_PATH and generate LIBNAME(a/so)
 LIBNAME     	:= $(TARGET)
-LIBFDT_STATIC 	:= lib$(LIBNAME).a
-LIBFDT_DYNAMIC  := lib$(LIBNAME).so
 
 # ------------------------- #
 #          MULTI-EXE        #
@@ -93,7 +92,6 @@ WARNING += -fno-strict-aliasing
 WARNING += -Winit-self
 WARNING += -Wno-system-headers
 WARNING += -Wredundant-decls
-WARNING += -Wsign-compare
 WARNING += -Wundef
 WARNING += -Wvolatile-register-var
 WARNING += -Wno-format-nonliteral
@@ -118,6 +116,21 @@ else
 	Q =
 endif
 export E Q
+
+# ------------------------- #
+#        auto config        #
+# ------------------------- #
+# create build dirs
+BUILD_BIN_PATH 	:= $(BUILD_PATH)/bin
+BUILD_LIB_PATH 	:= $(BUILD_PATH)/lib
+BUILD_DIRS := $(BUILD_BIN_PATH) $(BUILD_LIB_PATH)
+$(shell mkdir -p $(BUILD_DIRS))
+DESTDIR_SQ := $(shell echo "$(DESTDIR)" | sed "s/'/'\\\\''/g;1s/^/'/;\$$s/$$/'/")
+bindir_SQ  := $(shell echo "$(bindir)" | sed "s/'/'\\\\''/g;1s/^/'/;\$$s/$$/'/")
+# final output binary
+PROGRAM = $(BUILD_BIN_PATH)/$(TARGET)
+LIBFDT_STATIC 	:= $(BUILD_LIB_PATH)/lib$(LIBNAME).a
+LIBFDT_DYNAMIC  := $(BUILD_LIB_PATH)/lib$(LIBNAME).so
 
 # Translate uname -m into ARCH string
 ARCH ?= $(shell uname -m | sed -e s/i.86/i386/ -e s/ppc.*/powerpc/ \
@@ -152,8 +165,6 @@ ifeq ($(MAKECMDGOALS),debug)
 CFLAGS += -g
 endif
 
-PROGRAM = $(TARGET)
-
 all: $(PROGRAM)
 .PHONY: all
 
@@ -178,14 +189,15 @@ $(PROGRAM): $(OBJS)
 $(LIBFDT_STATIC): $(OBJS)
 	$(E) "  LINK    \033[1;32m%s\033[0m\n" $@
 	$(Q) $(AR) rcs $@ $(OBJS)
-	$(E) "  static library $(LIBFDT_STATIC) is ready.\n"
+	$(E) "  static  lib $@ is ready.\n"
 
 # compile dynamic lib
 # set LD_LIBRARY_PATH when using dynamic lib
 $(LIBFDT_DYNAMIC): $(OBJS)
 	$(E) "  LINK    \033[1;32m%s\033[0m\n" $@
 	$(Q) $(CC) -fPIC -shared $(OBJS) -o $@
-	$(E) "  dynamic library $(LIBFDT_DYNAMIC) is ready.\n"
+	$(E) "  dynamic lib $@ is ready.\n"
+	$(E) "  use lib with \033[1m-L$(BUILD_LIB_PATH) -l$(TARGET)\033[0m\n"
 
 # compile both static and dynamic lib
 lib: $(LIBFDT_STATIC) $(LIBFDT_DYNAMIC)
@@ -247,6 +259,7 @@ clean:
 	$(Q) rm -f $(DEPS) $(OBJS)
 	$(Q) rm -f $(EXECUTABLES)
 	$(Q) [ -f $(PROGRAM) ] && rm -f $(PROGRAM) || true
+	$(Q) rm -rf $(BUILD_BIN_PATH) $(BUILD_LIB_PATH) $(BUILD_PATH) > /dev/null 2>&1 || true
 	$(Q) rm -f $(LIBFDT_STATIC)
 	$(Q) rm -f $(LIBFDT_DYNAMIC)
 	$(Q) rm -f $(MULTI_EXE_TARGETS) $(MULTI_EXE_OBJS)
@@ -278,3 +291,4 @@ help:
 ifneq ($(MAKECMDGOALS),clean)
 -include $(DEPS)
 endif
+
