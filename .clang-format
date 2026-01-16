@@ -19,4 +19,5 @@ BraceWrapping:
 AlignConsecutiveMacros: AcrossEmptyLinesAndComments
 MaxEmptyLinesToKeep: 1
 AlignEscapedNewlines: Left
-
+SortIncludes: Never
+PointerAlignment: Left
